@@ -1,42 +1,32 @@
-import { TextFields } from "@mui/icons-material";
-import { useState } from "react";
-import Button from '@mui/material/Button';
+import { Formik } from 'formik';
+import { Input } from "@mui/material";
 
 
 const LoginForm = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        console.log('Identifiant : ', username);
-        console.log('Mot de passe : ', password);
+    const handleLogin = (data) => {
+        console.log('Identifiant : ', data);
     };
     return (
-        <div>
-            <TextFields
-                label="Identifiant"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextFields
-                label="Mot de passe"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleLogin}
-            >
-                Connexion
-            </Button>
-        </div>
+        <Formik enableReinitialize
+            initialValues={{
+                email: 'Email',
+                password: 'Password'
+            }}
+            onSubmit={handleLogin}
+        >
+            {
+                ({ values, handleChange }) => {
+                    return (
+                        <>
+                            <Input name="email" value={values.email} type="email" onChange={handleChange} />
+                            <Input name="password" value={values.password} type="password" onChange={handleChange} />
+                        </>
+                    );
+                }
+            }
+        </Formik>
     )
 }
+
+export default LoginForm    
