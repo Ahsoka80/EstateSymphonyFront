@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
-import { createUser } from "../../../../node-api/controller/User/UserController";
+// import { createUser } from "../../../../node-api/controller/User/UserController"
 import { AuthContext } from "../AuthContext/AuthContext";
 
 
 
 const SignupForm = () => {
-    const { login } = useContext(AuthContext);
+    // const { login } = 
+    useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -27,13 +28,13 @@ const SignupForm = () => {
             return;
         }
         try {
-            const userData = {
-                fullName: formData.fullName,
-                email: formData.email,
-                password: formData.password,
-            };
-            const data = await createUser(userData);
-            login(data.token); // Assuming createUser returns a token upon successful user creation
+            // const userData = {
+            //     fullName: formData.fullName,
+            //     email: formData.email,
+            //     password: formData.password,
+            // };
+            // const data = await createUser(userData);
+            // login(data.token); 
         } catch (error) {
             setError('Failed to create user');
         }

@@ -1,20 +1,19 @@
-import { Switch } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import RegisterForm from './Components/Register';
+import LoginForm from './Components/Login';
+import HomePage from './Components/Home';
 import { AuthProvider } from './AuthContext/AuthContext';
-import { BrowserRouter, Route } from 'react-router-dom';
-import LoginForm from './Components/Login'
-import SignupForm from './Form/SignupForm';
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/signup" component={SignupForm} />
-          <LoginForm>
-            <h1>Formulaire de Connexion</h1>
-          </LoginForm>
-        </Switch>
-      </BrowserRouter>
+      <Router>
+        <Routes>
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/home" element={<HomePage />} />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }
