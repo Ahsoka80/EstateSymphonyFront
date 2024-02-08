@@ -8,6 +8,7 @@ import { useState } from 'react';
 //Validation des champs du formulaire
 const validation = Yup.object({
     firstname: Yup.string().notRequired(),
+    lastname: Yup.string().notRequired(),
     email: Yup.string().email('Cet email ne correspond pas une adresse email valide').required('Le champ Email est obligatoire'),
     password: Yup.string()
         .required('Ce champ est obligatoire')
@@ -58,6 +59,7 @@ const RegisterForm = () => {
             validationSchema={validation}
             initialValues={{
                 firstname: '',
+                lastname: '',
                 email: '',
                 password: '',
                 confirmedPassword: '',
@@ -73,7 +75,15 @@ const RegisterForm = () => {
                             type='text'
                             onChange={handleChange}
                             fullWidth
-                            placeholder="Nom d'utilisateur"
+                            placeholder="Prénom"
+                        />
+                        <Input
+                            name='lastname'
+                            value={values.lastname}
+                            type='text'
+                            onChange={handleChange}
+                            fullWidth
+                            placeholder="Nom"
                         />
                         <Input name='email'
                             value={values.email}
@@ -81,6 +91,7 @@ const RegisterForm = () => {
                             onChange={handleChange}
                             fullWidth
                             placeholder='Email'
+                            required
                         />
                         <FormHelperText>{errors.email}</FormHelperText>
                         <Input name='password'
@@ -89,6 +100,7 @@ const RegisterForm = () => {
                             onChange={handleChange}
                             fullWidth
                             placeholder='Mot de passe'
+                            required
                         />
                         <FormHelperText>{errors.password}</FormHelperText>
                         <Input name='confirmedPassword'
@@ -97,6 +109,7 @@ const RegisterForm = () => {
                             onChange={handleChange}
                             fullWidth
                             placeholder='Confirmer le mot de passe'
+                            required
                         />
                         <FormHelperText>{errors.confirmedPassword}</FormHelperText>
                         {error && <FormHelperText error>{error}</FormHelperText>}
@@ -106,7 +119,7 @@ const RegisterForm = () => {
                             size='large'
                             variant='contained'
                         >
-                            S inscrire
+                            S'inscrire
                         </Button>
                         <Button
                             color='secondary'
