@@ -2,8 +2,10 @@ import { Form, Formik } from 'formik';
 import { Input, Button, FormHelperText } from "@mui/material";
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { login } from '../utils/api/auth';
+import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 //Validation des champs du formulaire de connexion
 const validation = Yup.object({
@@ -16,23 +18,57 @@ const validation = Yup.object({
         .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
 })
 
-
 const LoginForm = () => {
-    const [error, setError] = useState('');
     const navigate = useNavigate();
     const handleLogin = async (data) => {
         let message = '';
         try {
             message = await login(data)
-            setError(message)
+            if (message.status === 422) {
+                toast.error('Connexion échouée', {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Zoom,
+                });
+                toast.info(message.data.message, {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Slide,
+                })
+            } else {
+                console.log('Connexion de l\'utilisateur');
+                toast.success('Connexion accomplie', {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Flip,
+                })
+
+            }
         } catch (error) {
             console.error('Erreur : ', error);
-            setError(message)
         }
     };
 
     const handleRegister = () => {
         navigate('/register');
+    }
+    const handleHome = () => {
+        navigate('/');
     }
     return (
         <Formik enableReinitialize
@@ -65,7 +101,6 @@ const LoginForm = () => {
                                 placeholder='Mot de passe'
                             />
                             <FormHelperText>{errors.password}</FormHelperText>
-                            {error && <FormHelperText error>{error}</FormHelperText>}
                             <Button
                                 type='submit'
                                 color='success'
@@ -82,6 +117,14 @@ const LoginForm = () => {
                             >
                                 Inscription
                             </Button>
+                            <Button
+                                color='info'
+                                onClick={handleHome}
+                                size='small'
+                                variant='text'>
+                                Accueil
+                            </Button>
+                            <ToastContainer />
                         </Form>
                     </>
                 );

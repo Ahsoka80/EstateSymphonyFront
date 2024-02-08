@@ -24,16 +24,16 @@ instance.interceptors.response.use((res) => {
     return res;
 }, (errors) => {
     console.log(errors.response.data.message);
+
     if (errors.response.status === 401) {
-        console.log('401 Unauthorized')
         localStorage.removeItem('token');
         window.location.href = '/';
     }
     if (errors.response.status === 400) {
-        console.log('400 Bad Request')
+        console.log(errors);
         localStorage.removeItem('token');
     }
-    return errors.response.data.message;
+    return errors.response;
 })
 
 export default instance

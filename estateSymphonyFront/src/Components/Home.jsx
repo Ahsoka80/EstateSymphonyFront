@@ -4,14 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserEmail } from "../utils/api/user";
 import { useEmail } from "../utils/api/useEmail";
+import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 const HomePage = () => {
     const { isLoggedIn, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [userFirstname, setUserFirstname] = useState('');
-    const [userLastname, setUserLastname] = useState('');
+    const [userFirstname, setUserFirstname] = useState(' ');
+    const [userLastname, setUserLastname] = useState(' ');
     const email = useEmail();
     useEffect(() => {
         if (isLoggedIn) {
@@ -20,10 +22,22 @@ const HomePage = () => {
                 setUserLastname(data.lastname);
             })
             console.log('Utilisateur connecté');
+            if (userFirstname !== ' ' || userLastname !== ' ') {
+                toast.info(`Bonjour ${userFirstname} ${userLastname}`, {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Flip,
+                })
+            }
         } else {
             console.log('Utilisateur déconnecté');
         }
-    }, [isLoggedIn, email])
+    }, [isLoggedIn, email, userFirstname, userLastname])
     const handleLogout = () => {
         console.log('Déconnexion utilisateur..');
         logout();
@@ -57,6 +71,7 @@ const HomePage = () => {
                     </>
                 )
             }
+            <ToastContainer />
         </div>
     );
 };

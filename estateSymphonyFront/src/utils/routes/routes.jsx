@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import RegisterForm from '../../Components/Register';
 import LoginForm from '../../Components/Login';
 import HomePage from '../../Components/Home';
@@ -25,6 +25,7 @@ const RoutesDisplay = () => {
                         <Routes>
                             <Route path="/profil" element={<ProfilForm />} />
                             <Route path="/" element={<HomePage />} />
+                            <Route path='*' element={<Navigate to='/' />} />
                         </Routes>
                     )
                     :
@@ -33,6 +34,7 @@ const RoutesDisplay = () => {
                             <Route path="/register" element={<RegisterForm />} />
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/" element={<HomePage />} />
+                            <Route path='*' element={<Navigate to='/' />} />
                         </Routes>
                     )
                 }

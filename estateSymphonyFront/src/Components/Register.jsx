@@ -2,7 +2,9 @@ import { Button, Input, FormHelperText } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { register } from '../utils/api/auth';
+import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 //Validation des champs du formulaire
@@ -24,35 +26,66 @@ const validation = Yup.object({
 })
 
 const RegisterForm = () => {
-    const [error, setError] = useState('');
     const navigate = useNavigate();
     //Après validation des données du formulaire, envoi des données à l'API pour la création de l'utilisateur
     const handleRegister = async (data) => {
+        let message = '';
         try {
-            console.log("Inscription de l'utilisateur");
-            const response = await fetch('http://127.0.0.1:3000/user/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            });
-            const responseData = await response.json();
-            if (response.ok) {
-                console.log('Utilisateur inscrit avec succès !');
-                navigate('/login');
+            message = await register(data);
+            if (message.status === 422) {
+                toast.error('Inscription échouée', {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Zoom,
+                });
+                toast.info(message.data.message, {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Slide,
+                })
             } else {
-                console.log("Erreur lors de l'inscription : ", responseData.message);
-                setError(responseData.message)
+                console.log("Inscription de l'utilisateur");
+                toast.success('Inscription accomplie', {
+                    position: 'bottom-left',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    transition: Flip,
+                })
             }
         } catch (error) {
             console.error('Erreur réseau : ', error);
-            setError('Erreur inscription..')
+            toast.error(error, {
+                position: 'bottom-left',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                transition: Flip,
+            })
         }
     };
 
     const handleLogin = () => {
         navigate('/login');
+    }
+    const handleHome = () => {
+        navigate('/');
     }
     return (
         <Formik enableReinitialize
@@ -112,7 +145,7 @@ const RegisterForm = () => {
                             required
                         />
                         <FormHelperText>{errors.confirmedPassword}</FormHelperText>
-                        {error && <FormHelperText error>{error}</FormHelperText>}
+                        {/* {error && <FormHelperText error>{error}</FormHelperText>} */}
                         <Button
                             color='success'
                             onClick={handleSubmit}
@@ -129,7 +162,14 @@ const RegisterForm = () => {
                         >
                             Connexion
                         </Button>
-
+                        <Button
+                            color='info'
+                            onClick={handleHome}
+                            size='small'
+                            variant='text'>
+                            Accueil
+                        </Button>
+                        <ToastContainer />
                     </>
                 )
             }}
