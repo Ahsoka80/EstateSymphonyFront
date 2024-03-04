@@ -6,6 +6,7 @@ import { AuthContext } from '../../AuthContext/AuthContext';
 import { useContext } from 'react';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import ProfilForm from '../../Components/Profil';
+import ProfilPassword from '../../Components/ProfilPassword';
 
 const darkTheme = createTheme({
     palette: {
@@ -24,6 +25,7 @@ const RoutesDisplay = () => {
                     (
                         <Routes>
                             <Route path="/profil" element={<ProfilForm />} />
+                            <Route path="/profil/password" element={<ProfilPassword />} />
                             <Route path="/" element={<HomePage />} />
                             <Route path='*' element={<Navigate to='/' />} />
                         </Routes>

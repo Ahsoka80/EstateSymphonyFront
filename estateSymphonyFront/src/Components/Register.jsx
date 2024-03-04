@@ -1,10 +1,13 @@
-import { Button, Input, FormHelperText } from '@mui/material';
-import { Formik } from 'formik';
+import * as React from 'react';
+import { Button, Box, IconButton } from '@mui/material';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../utils/api/auth';
 import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CustomForm from './Form/CustomForm';
 
 
 //Validation des champs du formulaire
@@ -27,6 +30,11 @@ const validation = Yup.object({
 
 const RegisterForm = () => {
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmedPassword, setShowConfirmedPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleClickShowConfirmedPassword = () => setShowConfirmedPassword((show) => !show);
     //Après validation des données du formulaire, envoi des données à l'API pour la création de l'utilisateur
     const handleRegister = async (data) => {
         let message = '';
@@ -35,7 +43,7 @@ const RegisterForm = () => {
             if (message.status === 422) {
                 toast.error('Inscription échouée', {
                     position: 'bottom-left',
-                    autoClose: 2000,
+                    autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -45,7 +53,7 @@ const RegisterForm = () => {
                 });
                 toast.info(message.data.message, {
                     position: 'bottom-left',
-                    autoClose: 2000,
+                    autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -55,7 +63,7 @@ const RegisterForm = () => {
                 })
             } else {
                 console.log("Inscription de l'utilisateur");
-                toast.success('Inscription accomplie', {
+                toast.success('Inscription réussi', {
                     position: 'bottom-left',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -64,13 +72,14 @@ const RegisterForm = () => {
                     draggable: true,
                     theme: 'colored',
                     transition: Flip,
-                })
+                });
+                handleHome();
             }
         } catch (error) {
             console.error('Erreur réseau : ', error);
             toast.error(error, {
                 position: 'bottom-left',
-                autoClose: 2000,
+                autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -101,79 +110,93 @@ const RegisterForm = () => {
         >
             {({ values, handleChange, handleSubmit, errors }) => {
                 return (
-                    <>
-                        <Input
-                            name='firstname'
-                            value={values.firstname}
-                            type='text'
-                            onChange={handleChange}
-                            fullWidth
-                            placeholder="Prénom"
-                        />
-                        <Input
-                            name='lastname'
-                            value={values.lastname}
-                            type='text'
-                            onChange={handleChange}
-                            fullWidth
-                            placeholder="Nom"
-                        />
-                        <Input name='email'
-                            value={values.email}
-                            type='email'
-                            onChange={handleChange}
-                            fullWidth
-                            placeholder='Email'
-                            required
-                        />
-                        <FormHelperText>{errors.email}</FormHelperText>
-                        <Input name='password'
-                            value={values.password}
-                            type='password'
-                            onChange={handleChange}
-                            fullWidth
-                            placeholder='Mot de passe'
-                            required
-                        />
-                        <FormHelperText>{errors.password}</FormHelperText>
-                        <Input name='confirmedPassword'
-                            value={values.confirmedPassword}
-                            type='password'
-                            onChange={handleChange}
-                            fullWidth
-                            placeholder='Confirmer le mot de passe'
-                            required
-                        />
-                        <FormHelperText>{errors.confirmedPassword}</FormHelperText>
-                        {/* {error && <FormHelperText error>{error}</FormHelperText>} */}
-                        <Button
-                            color='success'
-                            onClick={handleSubmit}
-                            size='large'
-                            variant='contained'
-                        >
-                            S'inscrire
-                        </Button>
-                        <Button
-                            color='secondary'
-                            onClick={handleLogin}
-                            size='small'
-                            variant='text'
-                        >
-                            Connexion
-                        </Button>
-                        <Button
+                    <Box sx={{ '& button': { marginTop: 2 } }}>
+                        <IconButton
                             color='info'
                             onClick={handleHome}
-                            size='small'
-                            variant='text'>
-                            Accueil
-                        </Button>
-                        <ToastContainer />
-                    </>
+                        >
+                            <ArrowBack />
+                        </IconButton>
+                        <Form onSubmit={handleSubmit}>
+                            <CustomForm
+                                inputs={[
+                                    {
+                                        name: 'firstname',
+                                        value: values.firstname,
+                                        type: 'text',
+                                        onChange: handleChange,
+                                        label: 'Prénom',
+                                        error: errors.firstname,
+                                        required: false,
+                                    },
+                                    {
+                                        name: 'lastname',
+                                        value: values.lastname,
+                                        type: 'text',
+                                        onChange: handleChange,
+                                        label: 'Nom',
+                                        error: errors.lastname,
+                                        required: false,
+                                    },
+                                    {
+                                        name: 'email',
+                                        value: values.email,
+                                        type: 'text',
+                                        onChange: handleChange,
+                                        label: 'Email',
+                                        error: errors.email,
+                                        required: true,
+                                    },
+                                    {
+                                        name: 'password',
+                                        value: values.password,
+                                        type: 'password',
+                                        onChange: handleChange,
+                                        label: 'Mot de passe',
+                                        error: errors.password,
+                                        required: true,
+                                        secured: true,
+                                        showPassword: showPassword,
+                                        handleClickShowPassword: handleClickShowPassword,
+                                    },
+                                    {
+                                        name: 'confirmedPassword',
+                                        value: values.confirmedPassword,
+                                        type: 'password',
+                                        onChange: handleChange,
+                                        label: 'Confirmer mot de passe',
+                                        error: errors.confirmedPassword,
+                                        required: true,
+                                        secured: true,
+                                        showPassword: showConfirmedPassword,
+                                        handleClickShowPassword: handleClickShowConfirmedPassword,
+                                    },
+                                ]}
+                            />
+                            <Button
+                                color='success'
+                                onClick={handleSubmit}
+                                size='large'
+                                variant='contained'
+                                fullWidth
+                            >
+                                S'inscrire
+                            </Button>
+                            <Button
+                                fullWidth
+                                color='secondary'
+                                onClick={handleLogin}
+                                size='small'
+                                variant='text'
+                            >
+                                Déjà inscrit ?
+                            </Button>
+                            <ToastContainer />
+                        </Form>
+                    </Box>
                 )
             }}
-        </Formik>
+        </Formik >
     )
 }
 

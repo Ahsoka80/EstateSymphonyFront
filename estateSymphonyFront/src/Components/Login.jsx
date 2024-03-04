@@ -1,10 +1,13 @@
 import { Form, Formik } from 'formik';
-import { Input, Button, FormHelperText } from "@mui/material";
+import { Input, Button, FormHelperText, Box, IconButton } from "@mui/material";
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../utils/api/auth';
 import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import CustomForm from './Form/CustomForm';
+import React from 'react';
 
 
 //Validation des champs du formulaire de connexion
@@ -20,6 +23,9 @@ const validation = Yup.object({
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
     const handleLogin = async (data) => {
         let message = '';
         try {
@@ -27,7 +33,7 @@ const LoginForm = () => {
             if (message.status === 422) {
                 toast.error('Connexion échouée', {
                     position: 'bottom-left',
-                    autoClose: 2000,
+                    autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -37,7 +43,7 @@ const LoginForm = () => {
                 });
                 toast.info(message.data.message, {
                     position: 'bottom-left',
-                    autoClose: 2000,
+                    autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -47,9 +53,9 @@ const LoginForm = () => {
                 })
             } else {
                 console.log('Connexion de l\'utilisateur');
-                toast.success('Connexion accomplie', {
+                toast.success('Connexion réussi', {
                     position: 'bottom-left',
-                    autoClose: 2000,
+                    autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -57,7 +63,7 @@ const LoginForm = () => {
                     theme: 'colored',
                     transition: Flip,
                 })
-
+                navigate('/');
             }
         } catch (error) {
             console.error('Erreur : ', error);
@@ -81,52 +87,63 @@ const LoginForm = () => {
         >
             {({ values, handleChange, handleSubmit, errors }) => {
                 return (
-                    <>
+                    <Box sx={{ '& button': { marginTop: 2 } }}>
+                        <IconButton
+                            color='info'
+                            onClick={handleHome}
+                        >
+                            <ArrowBack />
+                        </IconButton>
                         <Form onSubmit={handleSubmit}>
-                            <Input
-                                name="email"
-                                value={values.email}
-                                type="email"
-                                onChange={handleChange}
-                                fullWidth
-                                placeholder='Email'
-                            />
-                            <FormHelperText>{errors.email}</FormHelperText>
-                            <Input
-                                name="password"
-                                value={values.password}
-                                type="password"
-                                onChange={handleChange}
-                                fullWidth
-                                placeholder='Mot de passe'
-                            />
-                            <FormHelperText>{errors.password}</FormHelperText>
+                            <CustomForm
+                                inputs={[
+                                    {
+                                        name: 'email',
+                                        value: values.email,
+                                        type: 'text',
+                                        onChange: handleChange,
+                                        label: 'Email',
+                                        error: errors.email,
+                                        required: true,
+                                    },
+                                    {
+                                        name: 'password',
+                                        value: values.password,
+                                        type: 'password',
+                                        onChange: handleChange,
+                                        label: 'Mot de passe',
+                                        error: errors.password,
+                                        required: true,
+                                        secured: true,
+                                        showPassword: showPassword,
+                                        handleClickShowPassword: handleClickShowPassword,
+                                    },
+                                ]}
+                            >
+                            </CustomForm>
+
                             <Button
                                 type='submit'
                                 color='success'
-                                // onClick={handleSubmit}
+                                onClick={handleSubmit}
                                 size='large'
+                                fullWidth
                                 variant='contained'
                             >
                                 Se connecter
                             </Button>
                             <Button
+                                fullWidth
+                                variant='text'
                                 color='secondary'
                                 onClick={handleRegister}
                                 size='small'
                             >
-                                Inscription
-                            </Button>
-                            <Button
-                                color='info'
-                                onClick={handleHome}
-                                size='small'
-                                variant='text'>
-                                Accueil
+                                Pas encore inscrit ?
                             </Button>
                             <ToastContainer />
                         </Form>
-                    </>
+                    </Box>
                 );
             }}
         </Formik>

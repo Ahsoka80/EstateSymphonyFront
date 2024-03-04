@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { userUpdate } from "../utils/api/userUpdate";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,6 @@ const validation = Yup.object({
 
 const ProfilForm = () => {
     const { isLoggedIn, logout } = useContext(AuthContext);
-
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const [firstnameOld, setUserFirstname] = useState('');
@@ -78,6 +77,10 @@ const ProfilForm = () => {
         console.log('Retour page d\'accueil..');
         navigate('/');
     }
+    const handlePasswordChange = () => {
+        console.log('Go page de changement de mot de passe..');
+        navigate('/profil/password');
+    }
     const handleLogout = () => {
         console.log('Déconnexion utilisateur..');
         logout();
@@ -97,6 +100,7 @@ const ProfilForm = () => {
     }
 
     return (
+        //Formulaire de modification du profil
         <Formik enableReinitialize
             validationSchema={validation}
             initialValues={{
@@ -142,6 +146,13 @@ const ProfilForm = () => {
                                 onClick={handleSubmit}
                             >
                                 Enregistrer
+                            </Button>
+                            <Button
+                                color="info"
+                                size="large"
+                                onClick={handlePasswordChange}
+                            >
+                                Mot de passe
                             </Button>
                             <Button
                                 color="error"
