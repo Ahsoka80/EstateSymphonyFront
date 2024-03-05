@@ -1,0 +1,21 @@
+.mainAccueil{
+    position: relative;
+    height: 100px;
+    
+}
+
+.imgAccueil{
+    position:relative;
+    z-index: 1;
+    width: 100%;
+}
+
+.accueil{
+    position: absolute;
+    top:100px;
+    left:500px;
+    width:600px; 
+    height:400px; 
+    z-index:2;
+    font-size:200%
+}
