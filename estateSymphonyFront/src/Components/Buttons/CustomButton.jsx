@@ -1,15 +1,20 @@
 import React from "react";
-import { Button} from "@mui/material";
+import { Button } from "@mui/material";
 import useIcon from "../../utils/hooks/useIcon";
 
 const CustomButton = (props) => {
-    
+
     const {
         text,
         onClick,
         iconPosition,
         icon,
         type,
+        size,
+        fullWidth,
+        color,
+
+
     } = props;
     return (
         <Button
@@ -26,7 +31,11 @@ const CustomButton = (props) => {
                     useIcon(icon, 'secondary', '5')
                 ) : null
             }
-            >
+            size={size}
+            fullWidth={fullWidth}
+            type={type}
+            color={color}
+        >
             {text}
         </Button>
     );

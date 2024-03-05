@@ -1,42 +1,39 @@
-import React from 'react'
 import {
-    createBrowserRouter,
-    RouterProvider,
-  } from "react-router-dom";
-import { LoginScreens } from '../Screens/LoginScreen/LoginScreens';
-import { RegistrerScreen } from '../Screens/RegistrerScreen/RegistrerScreen';
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { Details } from '../Screens/Details/Details';
-import Accueil from '../Componants/Accueil/Accueil';
-import Main from '../Componants/Main/Main';
-
+import Accueil from '../Components/Accueil/Accueil';
+import Main from '../Components/Main/Main';
+import LoginForm from "../Screens/LoginScreen/Login";
+import RegisterForm from "../Screens/RegistrerScreen/Register";
 
 export const ConnectionNavigateur = () => {
-    const router = createBrowserRouter([
-      {
-        path: '/',
-        element: <Main/>,
-        children: [
-          {
-            path: '/login',
-            element: <LoginScreens/>
-          },
-          {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Main />,
+      children: [
+        {
+          path: '/login',
+          element: <LoginForm />
+        },
+        {
           path: '/',
-          element: <Accueil/>
-          },
-          {
-              path: '/register',
-              element: <RegistrerScreen/>
-          },
-          {
-              path: '/details/:id',
-              element: <Details/>
-          }
-        ],
-      }
-       
-    ])
+          element: <Accueil />
+        },
+        {
+          path: '/register',
+          element: <RegisterForm />
+        },
+        {
+          path: '/details/:id',
+          element: <Details />
+        }
+      ],
+    }
+  ])
   return (
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   )
 }

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import './Accueil.css'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -13,13 +12,13 @@ export default function Accueil() {
     <>
       <div className='mainAccueil'>
 
-        <img className='imgAccueil' src="..\src\assets\img\hklkkjndono.jpg" alt="image d'un salon moderne avec des fauteuil blanc"/>
-      
+        <img className='imgAccueil' src="..\src\assets\img\hklkkjndono.jpg" alt="image d'un salon moderne avec des fauteuil blanc" />
+
         <div className='accueil'>
           <span>Bonjour Accueil</span>
-            </div>
+        </div>
 
-            <div>
+        <div>
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia
               sx={{ height: 140 }}
@@ -44,8 +43,8 @@ export default function Accueil() {
 
       </div>
 
-        
-        
+
+
     </>
   )
 }

@@ -4,10 +4,11 @@ import ArrowBack from '@mui/icons-material/ArrowBack';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../utils/api/auth';
+import { register } from '../../utils/api/auth';
 import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CustomForm from './Form/CustomForm';
+import CustomForm from '../../Components/Form/CustomForm';
+import CustomButton from '../../Components/Buttons/CustomButton';
 
 
 //Validation des champs du formulaire
@@ -173,15 +174,14 @@ const RegisterForm = () => {
                                     },
                                 ]}
                             />
-                            <Button
+                            <CustomButton
+
                                 color='success'
                                 onClick={handleSubmit}
                                 size='large'
                                 variant='contained'
                                 fullWidth
-                            >
-                                S'inscrire
-                            </Button>
+                            />
                             <Button
                                 fullWidth
                                 color='secondary'
