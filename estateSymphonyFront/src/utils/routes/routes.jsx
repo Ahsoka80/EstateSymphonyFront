@@ -8,18 +8,18 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import ProfilForm from '../../Components/Profil';
 import ProfilPassword from '../../Components/ProfilPassword';
 
-const darkTheme = createTheme({
-    palette: {
-        mode: 'dark',
-    },
-});
+// const darkTheme = createTheme({
+//     palette: {
+//         mode: 'dark',
+//     },
+// });
 
 const RoutesDisplay = () => {
     const { isLoggedIn } = useContext(AuthContext);
 
     return (
         <>
-            <ThemeProvider theme={darkTheme}>
+            <ThemeProvider>
                 <CssBaseline />
                 {isLoggedIn ?
                     (
