@@ -3,12 +3,14 @@ import * as Yup from 'yup';
 import { userUpdate } from "../utils/api/userUpdate";
 import { useNavigate } from "react-router-dom";
 import { Form, Formik } from "formik";
-import { Button, FormHelperText, Input } from "@mui/material";
+import { Button, FormHelperText, IconButton, Input } from "@mui/material";
 import { useEmail } from "../utils/api/useEmail";
 import { AuthContext } from "../AuthContext/AuthContext";
 import { getUserEmail } from "../utils/api/user";
 import { Bounce, Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ArrowBack from "@mui/icons-material/ArrowBack";
+import CustomForm from "./Form/CustomForm";
 
 const validation = Yup.object({
     firstname: Yup.string().notRequired(),
@@ -112,33 +114,40 @@ const ProfilForm = () => {
             {({ values, handleChange, handleSubmit, errors }) => {
                 return (
                     <>
+                        <IconButton
+                            color="info"
+                            onClick={handleBackHome}>
+                            <ArrowBack />
+                        </IconButton>
                         <Form onSubmit={handleSubmit}>
-                            <Input
-                                name="firstname"
-                                value={values.firstname}
-                                type="text"
-                                onChange={handleChange}
-                                fullWidth
-                                placeholder={firstnameOld}
-                            />
-                            <FormHelperText>{errors.firstname}</FormHelperText>
-                            <Input
-                                name="lastname"
-                                value={values.lastname}
-                                type="text"
-                                onChange={handleChange}
-                                fullWidth
-                                placeholder={lastnameOld}
-                            />
-                            <FormHelperText>{errors.lastname}</FormHelperText>
-                            {error && <FormHelperText variant="standard">{error}</FormHelperText>}
-                            <Button
-                                color="info"
-                                size="large"
-                                onClick={handleBackHome}
+                            <CustomForm
+                                inputs={[
+                                    {
+                                        name: "firstname",
+                                        value: values.firstname,
+                                        type: "text",
+                                        onChange: handleChange,
+                                        label: 'Prénom',
+                                        placeholder: firstnameOld,
+                                        required: false,
+                                        error: errors.firstname,
+                                    },
+                                    {
+                                        name: "lastname",
+                                        value: values.lastname,
+                                        type: "text",
+                                        onChange: handleChange,
+                                        label: 'Nom',
+                                        placeholder: lastnameOld,
+                                        required: false,
+                                        error: errors.lastname,
+                                    },
+                                ]}
                             >
-                                Retour
-                            </Button>
+
+                            </CustomForm>
+                            {error && <FormHelperText variant="standard">{error}</FormHelperText>}
+
                             <Button
                                 type="submit"
                                 color="warning"
