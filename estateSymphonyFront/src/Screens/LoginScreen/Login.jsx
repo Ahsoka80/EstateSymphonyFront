@@ -1,13 +1,14 @@
 import { Form, Formik } from 'formik';
-import { Input, Button, FormHelperText, Box, IconButton } from "@mui/material";
+import { Button, Box, IconButton } from "@mui/material";
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../utils/api/auth';
+import { login } from '../../utils/api/auth';
 import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ArrowBack from '@mui/icons-material/ArrowBack';
-import CustomForm from './Form/CustomForm';
+import CustomForm from '../../Components/Form/CustomForm';
 import React from 'react';
+import CustomButton from '../../Components/Buttons/CustomButton';
 
 
 //Validation des champs du formulaire de connexion
@@ -122,16 +123,19 @@ const LoginForm = () => {
                             >
                             </CustomForm>
 
-                            <Button
-                                type='submit'
-                                color='success'
+                            <CustomButton
                                 onClick={handleSubmit}
-                                size='large'
-                                fullWidth
-                                variant='contained'
-                            >
-                                Se connecter
-                            </Button>
+                                // type={'contained'}
+                                text={'Connexion'}
+                                style={{ color: 'white' }}
+                                iconPosition={'right'}
+                                type={'submit'}
+                                color={'success'}
+                                size={'large'}
+                                fullWidth={true}
+                                variant={'contained'}
+
+                            />
                             <Button
                                 fullWidth
                                 variant='text'

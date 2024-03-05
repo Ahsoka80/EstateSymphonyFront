@@ -1,12 +1,11 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { AuthContext } from "../AuthContext/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserEmail } from "../utils/api/user";
 import { useEmail } from "../utils/api/useEmail";
-import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ArrowBack from "@mui/icons-material/ArrowBack";
 
 
 
@@ -22,6 +21,7 @@ const HomePage = () => {
                 setUserFirstname(data.firstname);
                 setUserLastname(data.lastname);
             })
+
             console.log('Utilisateur connecté');
             if (userFirstname !== ' ' || userLastname !== ' ') {
                 toast.info(`Bonjour ${userFirstname} ${userLastname}`, {

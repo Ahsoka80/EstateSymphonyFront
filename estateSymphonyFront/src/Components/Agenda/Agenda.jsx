@@ -1,4 +1,3 @@
-import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Agenda.css';
@@ -10,12 +9,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
 
- const Agenda = () => {
+const Agenda = () => {
     const event = [
         {
             title: "the Title",
             start: "2024-03-06T13:00:00",
-            end:"2024-03-08T14:00:00",
+            end: "2024-03-08T14:00:00",
         },
     ];
     return (
@@ -24,7 +23,7 @@ import frLocale from '@fullcalendar/core/locales/fr';
             timeZone="UTC+1"
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView='dayGridMonth'
-            headerToolbar= {{
+            headerToolbar={{
                 start: "today prev,next",
                 center: "title",
                 end: "dayGridMonth, timeGridWeek, timeGridDay",
@@ -32,6 +31,6 @@ import frLocale from '@fullcalendar/core/locales/fr';
             events={event}
         />
     )
- }
+}
 
- export default Agenda;
+export default Agenda;
