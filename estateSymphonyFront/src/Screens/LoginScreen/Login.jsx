@@ -9,6 +9,7 @@ import ArrowBack from '@mui/icons-material/ArrowBack';
 import CustomForm from '../../Components/Form/CustomForm';
 import React from 'react';
 import CustomButton from '../../Components/Buttons/CustomButton';
+import './Login.css';
 
 
 //Validation des champs du formulaire de connexion
@@ -89,64 +90,70 @@ const LoginForm = () => {
             {({ values, handleChange, handleSubmit, errors }) => {
                 return (
                     <Box sx={{ '& button': { marginTop: 2 } }}>
-                        <IconButton
-                            color='info'
-                            onClick={handleHome}
-                        >
-                            <ArrowBack />
-                        </IconButton>
-                        <Form onSubmit={handleSubmit}>
-                            <CustomForm
-                                inputs={[
-                                    {
-                                        name: 'email',
-                                        value: values.email,
-                                        type: 'text',
-                                        onChange: handleChange,
-                                        label: 'Email',
-                                        error: errors.email,
-                                        required: true,
-                                    },
-                                    {
-                                        name: 'password',
-                                        value: values.password,
-                                        type: 'password',
-                                        onChange: handleChange,
-                                        label: 'Mot de passe',
-                                        error: errors.password,
-                                        required: true,
-                                        secured: true,
-                                        showPassword: showPassword,
-                                        handleClickShowPassword: handleClickShowPassword,
-                                    },
-                                ]}
+                        <div className='arrowBack'>
+                            <IconButton
+                                color='info'
+                                onClick={handleHome}
                             >
-                            </CustomForm>
+                                <ArrowBack />
+                            </IconButton>
+                        </div>
+                        <h2>Connexion</h2>
+                        <div className='form'>
+                            <Form onSubmit={handleSubmit}>
+                                <CustomForm
+                                    inputs={[
+                                        {
+                                            name: 'email',
+                                            value: values.email,
+                                            type: 'text',
+                                            onChange: handleChange,
+                                            label: 'Email',
+                                            error: errors.email,
+                                            required: true,
+                                        },
+                                        {
+                                            name: 'password',
+                                            value: values.password,
+                                            type: 'password',
+                                            onChange: handleChange,
+                                            label: 'Mot de passe',
+                                            error: errors.password,
+                                            required: true,
+                                            secured: true,
+                                            showPassword: showPassword,
+                                            handleClickShowPassword: handleClickShowPassword,
+                                        },
+                                    ]}
+                                >
+                                </CustomForm>
 
-                            <CustomButton
-                                onClick={handleSubmit}
-                                // type={'contained'}
-                                text={'Connexion'}
-                                style={{ color: 'white' }}
-                                iconPosition={'right'}
-                                type={'submit'}
-                                color={'success'}
-                                size={'large'}
-                                fullWidth={true}
-                                variant={'contained'}
+                                <CustomButton
+                                    onClick={handleSubmit}
+                                    // type={'contained'}
+                                    text={'Connexion'}
+                                    style={{ color: 'white' }}
+                                    iconPosition={'right'}
+                                    type={'submit'}
+                                    color={'success'}
+                                    size={'large'}
+                                    fullWidth={true}
+                                    variant={'contained'}
 
-                            />
-                            <Button
-                                fullWidth
-                                variant='text'
-                                color='secondary'
-                                onClick={handleRegister}
-                                size='small'
-                            >
-                                Pas encore inscrit ?
-                            </Button>
-                            <ToastContainer />
-                        </Form>
+                                />
+                                <Button
+                                    fullWidth
+                                    variant='text'
+                                    color='secondary'
+                                    onClick={handleRegister}
+                                    size='small'
+                                >
+                                    Pas encore inscrit ?
+                                </Button>
+                                
+                                <ToastContainer />
+                            </Form>
+                        </div>
                     </Box>
                 );
             }}

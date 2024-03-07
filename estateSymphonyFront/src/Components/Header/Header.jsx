@@ -25,18 +25,9 @@ const Header = (props) => {
                 setUserFirstname(data.firstname);
                 setUserLastname(data.lastname);
             })
-            getProperties().then(dataa => {
-                console.log(dataa);
-                console.log("coucou");
-            })
-
             console.log('Utilisateur connecté');
         } else {
             console.log('Utilisateur déconnecté');
-            getProperties().then(dataa => {
-                console.log(dataa);
-                console.log("coucou");
-            })
         }
     }, [isLoggedIn, email, userFirstname, userLastname])
     const handleLogout = () => {
@@ -60,14 +51,14 @@ const Header = (props) => {
 
     return (
         <header className='header'>
-            <Navbar className='header1'>
-                <Container>
+            <Navbar>
+                <Container className='containerMenu'>
                     <Navbar.Brand style={{ color: textColor }} onClick={handleHome}>
                         <span>
                             {title}
                         </span>
                     </Navbar.Brand>
-                    <Container style={{ display: 'flex', justifyContent: 'end' }}>
+                    <Container>
                         <Link to='/accueil' style={{ textDecoration: 'none', color: 'white', padding: '0px 10px' }}>
                             Accueil
                         </Link>
@@ -83,8 +74,7 @@ const Header = (props) => {
                         <Link to='/estimation' style={{ textDecoration: 'none', color: 'white', padding: '0px 10px' }}>
                             Estimation
                         </Link>
-                    </Container>
-                    {!isLoggedIn ?
+                        {!isLoggedIn ?
                         (<>
                             <CustomButton onClick={handleLogin} type={'contained'} text={'Connexion'} style={{ color: textColor }} iconPosition={'right'} />
                         </>)
@@ -94,6 +84,8 @@ const Header = (props) => {
 
                         </>)
                     }
+                    </Container>
+                    
                 </Container>
             </Navbar>
         </header>

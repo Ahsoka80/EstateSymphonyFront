@@ -1,13 +1,12 @@
-.mainAccueil{
+.container{
     position: relative;
-    height: 100px;
-    
 }
 
 .imgAccueil{
     position:relative;
     z-index: 1;
-    width: 100%;
+    width: 90%;
+    border-radius: 5px;
 }
 
 .accueil{
@@ -15,7 +14,18 @@
     top:100px;
     left:500px;
     width:600px; 
-    height:400px; 
+    height:10px; 
     z-index:2;
     font-size:200%
+}
+
+.card{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 30px 40px;
+}
+
+.rowLastAnnoncement{
+padding: 50px 0px;
 }
