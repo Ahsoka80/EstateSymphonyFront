@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEmail } from '../../utils/api/useEmail';
 import { getUserEmail } from '../../utils/api/user';
 import { AuthContext } from '../../AuthContext/AuthContext';
-import { getProperties } from '../../utils/api/properties';
+import { getAllProperties } from '../../utils/api/properties';
 
 const Header = (props) => {
 
@@ -25,17 +25,15 @@ const Header = (props) => {
                 setUserFirstname(data.firstname);
                 setUserLastname(data.lastname);
             })
-            getProperties().then(dataa => {
+            getAllProperties().then(dataa => {
                 console.log(dataa);
-                console.log("coucou");
             })
 
             console.log('Utilisateur connecté');
         } else {
             console.log('Utilisateur déconnecté');
-            getProperties().then(dataa => {
+            getAllProperties().then(dataa => {
                 console.log(dataa);
-                console.log("coucou");
             })
         }
     }, [isLoggedIn, email, userFirstname, userLastname])
@@ -86,11 +84,23 @@ const Header = (props) => {
                     </Container>
                     {!isLoggedIn ?
                         (<>
-                            <CustomButton onClick={handleLogin} type={'contained'} text={'Connexion'} style={{ color: textColor }} iconPosition={'right'} />
+                            <CustomButton
+                                onClick={handleLogin}
+                                type={'contained'}
+                                text={'Connexion'}
+                                style={{ color: textColor }}
+                                iconPosition={'right'}
+                            />
                         </>)
                         :
                         (<>
-                            <CustomButton onClick={handleLogout} type={'contained'} text={'Déconnexion'} style={{ color: textColor }} iconPosition={'right'} />
+                            <CustomButton
+                                onClick={handleLogout}
+                                type={'contained'}
+                                text={'Déconnexion'}
+                                style={{ color: textColor }}
+                                iconPosition={'right'}
+                            />
 
                         </>)
                     }

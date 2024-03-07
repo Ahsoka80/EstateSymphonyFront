@@ -5,9 +5,33 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import CustomForm from '../Form/CustomForm';
+import { Form, useNavigate } from 'react-router-dom';
+import { Formik } from 'formik';
+import { Box } from '@mui/material';
+import * as Yup from 'yup';
+import { getAllProperties } from '../../utils/api/properties';
+import CustomButton from '../Buttons/CustomButton';
 
+const validation = Yup.object({
+  energising: Yup.string()
+    .notRequired()
+    .matches(/\w+/, "Le mot de passe doit contenir au moins 1 chiffre"),
+})
 
 export default function Accueil() {
+  // const navigate = useNavigate();
+
+  const handleSearch = async (data) => {
+    let message = '';
+    try {
+      message = await getAllProperties(data);
+      console.log(message);
+
+    } catch (error) {
+      console.error('Erreur : ', error);
+    }
+  }
   return (
     <>
       <div className='mainAccueil'>
@@ -16,6 +40,93 @@ export default function Accueil() {
 
         <div className='accueil'>
           <span>Bonjour Accueil</span>
+          <div className='SearchForm'>
+            <Formik enableReinitialize
+              validationSchema={validation}
+              initialValues={{
+                energising: '',
+
+              }}
+              onSubmit={handleSearch}
+            >
+              {({ values, handleChange, handleSubmit, errors }) => {
+                return (
+                  <Box>
+                    <Form onSubmit={handleSubmit}>
+                      <CustomForm
+                        inputs={[
+                          {
+                            name: 'energising',
+                            value: values.energising,
+                            type: 'text',
+                            onChange: handleChange,
+                            label: 'Classe énergétique',
+                            error: errors.energising,
+                            required: false,
+                          },
+                          {
+                            name: 'floor',
+                            value: values.floor,
+                            type: 'text',
+                            onChange: handleChange,
+                            label: 'Nombre d\'étages',
+                            error: errors.floor,
+                            required: false,
+                          },
+                          {
+                            name: 'parking',
+                            value: values.parking,
+                            type: 'checkbox',
+                            onChange: handleChange,
+                            label: 'place de parking',
+                            error: errors.parking,
+                            required: false,
+                          },
+                          {
+                            name: 'rooms',
+                            value: values.rooms,
+                            type: 'number',
+                            onChange: handleChange,
+                            label: 'Pièces',
+                            error: errors.rooms,
+                            required: false,
+                          },
+                          {
+                            name: 'showerRoom',
+                            value: values.showerRoom,
+                            type: 'number',
+                            onChange: handleChange,
+                            label: 'Salle de bain',
+                            error: errors.showerRoom,
+                            required: false,
+                          },
+                          {
+                            name: 'surface',
+                            value: values.surface,
+                            type: 'number',
+                            onChange: handleChange,
+                            label: 'Surface (m²)',
+                            error: errors.surface,
+                            required: false,
+                          },
+                        ]}
+                      ></CustomForm>
+                      <CustomButton
+                        onClick={handleSubmit}
+                        text={'Rechercher'}
+                        style={{ color: 'white' }}
+                        type={'submit'}
+                        size={'large'}
+                        fullWidth={true}
+                        variant={'contained'}
+                      >
+                      </CustomButton>
+                    </Form>
+                  </Box>
+                )
+              }}
+            </Formik>
+          </div>
         </div>
 
         <div>

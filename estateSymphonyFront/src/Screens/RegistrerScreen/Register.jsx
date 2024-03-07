@@ -175,12 +175,13 @@ const RegisterForm = () => {
                                 ]}
                             />
                             <CustomButton
-
-                                color='success'
                                 onClick={handleSubmit}
-                                size='large'
-                                variant='contained'
-                                fullWidth
+                                text={'S\'inscrire'}
+                                type={'submit'}
+                                color={'success'}
+                                size={'large'}
+                                variant={'contained'}
+                                fullWidth={true}
                             />
                             <Button
                                 fullWidth
