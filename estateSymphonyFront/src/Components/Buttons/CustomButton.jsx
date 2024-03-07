@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { Button } from "@mui/material";
 import useIcon from "../../utils/hooks/useIcon";
 
@@ -33,7 +33,6 @@ const CustomButton = (props) => {
             }
             size={size}
             fullWidth={fullWidth}
-            type={type}
             color={color}
         >
             {text}

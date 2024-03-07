@@ -121,8 +121,8 @@ const RegisterForm = () => {
                                 <Box sx={{ '& button': { marginTop: 2 } }}>
                                     <div className='arrowBack'>
                                         <IconButton
-                                        color='info'
-                                        onClick={handleHome}
+                                            color='info'
+                                            onClick={handleHome}
                                         >
                                             <ArrowBack />
                                         </IconButton>
@@ -193,7 +193,7 @@ const RegisterForm = () => {
                                                 variant='contained'
                                                 fullWidth
                                             />
-                                                
+
                                             <Button
                                                 fullWidth
                                                 color='secondary'
