@@ -11,7 +11,8 @@ export const getAllProperties = async () => {
 
 export const getPropertiesBySearch = async (data) => {
     try {
-        const response = await instance.get(`properties/`);
+        const response = await instance.post('propertiesBySearch', data);
+        return response.data.data;
     } catch (error) {
         console.error('Erreur récupération des propriétés de la recherche : ', error);
     }
