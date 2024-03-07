@@ -2,6 +2,9 @@ import './App.css'
 import { ThemeProvider, createTheme } from '@mui/material'
 import { ConnectionNavigateur } from './Navigation/ConnectionNavigateur'
 import { AuthProvider } from './AuthContext/AuthContext'
+import { useEffect, useState } from 'react';
+import { getProperties } from './utils/api/properties';
+import PropertiesContext from './context/propertieContext';
 
 
 const themeLight = createTheme({
@@ -25,10 +28,20 @@ const themeLight = createTheme({
 
 function App() {
 
+  const [properties, setProperties]= useState([ ])
+  useEffect(() => {
+    getProperties()
+            .then(dataa => {
+                setProperties(dataa.slice(-4)) // La fonction .slice() permet de d'afficher les dernières élément de la tableau dataa.
+            })
+  }, [])
+
   return (
     <ThemeProvider theme={themeLight}>
       <AuthProvider>
+        <PropertiesContext.Provider value={{properties: properties}}>
         <ConnectionNavigateur />
+        </PropertiesContext.Provider>
       </AuthProvider>
     </ThemeProvider>
   )

@@ -9,6 +9,10 @@ import { Flip, Slide, ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CustomForm from '../../Components/Form/CustomForm';
 import CustomButton from '../../Components/Buttons/CustomButton';
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import './RegistrerScreen.css'
 
 
 //Validation des champs du formulaire
@@ -98,106 +102,117 @@ const RegisterForm = () => {
         navigate('/');
     }
     return (
-        <Formik enableReinitialize
-            validationSchema={validation}
-            initialValues={{
-                firstname: '',
-                lastname: '',
-                email: '',
-                password: '',
-                confirmedPassword: '',
-            }}
-            onSubmit={handleRegister}
-        >
-            {({ values, handleChange, handleSubmit, errors }) => {
-                return (
-                    <Box sx={{ '& button': { marginTop: 2 } }}>
-                        <IconButton
-                            color='info'
-                            onClick={handleHome}
-                        >
-                            <ArrowBack />
-                        </IconButton>
-                        <Form onSubmit={handleSubmit}>
-                            <CustomForm
-                                inputs={[
-                                    {
-                                        name: 'firstname',
-                                        value: values.firstname,
-                                        type: 'text',
-                                        onChange: handleChange,
-                                        label: 'Prénom',
-                                        error: errors.firstname,
-                                        required: false,
-                                    },
-                                    {
-                                        name: 'lastname',
-                                        value: values.lastname,
-                                        type: 'text',
-                                        onChange: handleChange,
-                                        label: 'Nom',
-                                        error: errors.lastname,
-                                        required: false,
-                                    },
-                                    {
-                                        name: 'email',
-                                        value: values.email,
-                                        type: 'text',
-                                        onChange: handleChange,
-                                        label: 'Email',
-                                        error: errors.email,
-                                        required: true,
-                                    },
-                                    {
-                                        name: 'password',
-                                        value: values.password,
-                                        type: 'password',
-                                        onChange: handleChange,
-                                        label: 'Mot de passe',
-                                        error: errors.password,
-                                        required: true,
-                                        secured: true,
-                                        showPassword: showPassword,
-                                        handleClickShowPassword: handleClickShowPassword,
-                                    },
-                                    {
-                                        name: 'confirmedPassword',
-                                        value: values.confirmedPassword,
-                                        type: 'password',
-                                        onChange: handleChange,
-                                        label: 'Confirmer mot de passe',
-                                        error: errors.confirmedPassword,
-                                        required: true,
-                                        secured: true,
-                                        showPassword: showConfirmedPassword,
-                                        handleClickShowPassword: handleClickShowConfirmedPassword,
-                                    },
-                                ]}
-                            />
-                            <CustomButton
-                                onClick={handleSubmit}
-                                text={'S\'inscrire'}
-                                type={'submit'}
-                                color={'success'}
-                                size={'large'}
-                                variant={'contained'}
-                                fullWidth={true}
-                            />
-                            <Button
-                                fullWidth
-                                color='secondary'
-                                onClick={handleLogin}
-                                size='small'
-                                variant='text'
-                            >
-                                Déjà inscrit ?
-                            </Button>
-                            <ToastContainer />
-                        </Form>
-                    </Box>
-                )
-            }}
-        </Formik >
+        <Container>
+            <Row>
+                <Col>
+                    <Formik enableReinitialize
+                        validationSchema={validation}
+                        initialValues={{
+                            firstname: '',
+                            lastname: '',
+                            email: '',
+                            password: '',
+                            confirmedPassword: '',
+                        }}
+                        onSubmit={handleRegister}
+                    >
+                        {({ values, handleChange, handleSubmit, errors }) => {
+                            return (
+                                <Box sx={{ '& button': { marginTop: 2 } }}>
+                                    <div className='arrowBack'>
+                                        <IconButton
+                                            color='info'
+                                            onClick={handleHome}
+                                        >
+                                            <ArrowBack />
+                                        </IconButton>
+                                    </div>
+                                    <h2>Créer un compte</h2>
+                                    <div className='form'>
+                                        <Form onSubmit={handleSubmit}>
+                                            <CustomForm
+                                                inputs={[
+                                                    {
+                                                        name: 'firstname',
+                                                        value: values.firstname,
+                                                        type: 'text',
+                                                        onChange: handleChange,
+                                                        label: 'Prénom',
+                                                        error: errors.firstname,
+                                                        required: false,
+                                                    },
+                                                    {
+                                                        name: 'lastname',
+                                                        value: values.lastname,
+                                                        type: 'text',
+                                                        onChange: handleChange,
+                                                        label: 'Nom',
+                                                        error: errors.lastname,
+                                                        required: false,
+                                                    },
+                                                    {
+                                                        name: 'email',
+                                                        value: values.email,
+                                                        type: 'text',
+                                                        onChange: handleChange,
+                                                        label: 'Email',
+                                                        error: errors.email,
+                                                        required: true,
+                                                    },
+                                                    {
+                                                        name: 'password',
+                                                        value: values.password,
+                                                        type: 'password',
+                                                        onChange: handleChange,
+                                                        label: 'Mot de passe',
+                                                        error: errors.password,
+                                                        required: true,
+                                                        secured: true,
+                                                        showPassword: showPassword,
+                                                        handleClickShowPassword: handleClickShowPassword,
+                                                    },
+                                                    {
+                                                        name: 'confirmedPassword',
+                                                        value: values.confirmedPassword,
+                                                        type: 'password',
+                                                        onChange: handleChange,
+                                                        label: 'Confirmer mot de passe',
+                                                        error: errors.confirmedPassword,
+                                                        required: true,
+                                                        secured: true,
+                                                        showPassword: showConfirmedPassword,
+                                                        handleClickShowPassword: handleClickShowConfirmedPassword,
+                                                    },
+                                                ]}
+                                            />
+                                            <CustomButton
+                                                text={"Créer un compte"}
+                                                color='success'
+                                                onClick={handleSubmit}
+                                                size='large'
+                                                variant='contained'
+                                                fullWidth
+                                            />
+
+                                            <Button
+                                                fullWidth
+                                                color='secondary'
+                                                onClick={handleLogin}
+                                                size='small'
+                                                variant='text'
+                                            >
+                                                Déjà inscrit ?
+                                            </Button>
+                                            <ToastContainer />
+                                        </Form>
+                                    </div>
+                                </Box>
+                            )
+                        }}
+                    </Formik >
+                </Col>
+            </Row>
+        </Container>
     )
 }
 

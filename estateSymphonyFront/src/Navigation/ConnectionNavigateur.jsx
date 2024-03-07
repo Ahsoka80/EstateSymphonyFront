@@ -7,7 +7,7 @@ import Accueil from '../Components/Accueil/Accueil';
 import Main from '../Components/Main/Main';
 import LoginForm from "../Screens/LoginScreen/Login";
 import RegisterForm from "../Screens/RegistrerScreen/Register";
-
+import Profil from "../Components/Profil"
 export const ConnectionNavigateur = () => {
   const router = createBrowserRouter([
     {
@@ -29,6 +29,10 @@ export const ConnectionNavigateur = () => {
         {
           path: '/details/:id',
           element: <Details />
+        },
+        {
+          path: '/profil',
+          element: <Profil />
         }
       ],
     }

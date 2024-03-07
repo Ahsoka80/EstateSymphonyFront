@@ -58,14 +58,14 @@ const Header = (props) => {
 
     return (
         <header className='header'>
-            <Navbar className='header1'>
-                <Container>
+            <Navbar>
+                <Container className='containerMenu'>
                     <Navbar.Brand style={{ color: textColor }} onClick={handleHome}>
                         <span>
                             {title}
                         </span>
                     </Navbar.Brand>
-                    <Container style={{ display: 'flex', justifyContent: 'end' }}>
+                    <Container>
                         <Link to='/accueil' style={{ textDecoration: 'none', color: 'white', padding: '0px 10px' }}>
                             Accueil
                         </Link>
@@ -81,29 +81,30 @@ const Header = (props) => {
                         <Link to='/estimation' style={{ textDecoration: 'none', color: 'white', padding: '0px 10px' }}>
                             Estimation
                         </Link>
-                    </Container>
-                    {!isLoggedIn ?
-                        (<>
-                            <CustomButton
-                                onClick={handleLogin}
-                                type={'contained'}
-                                text={'Connexion'}
-                                style={{ color: textColor }}
-                                iconPosition={'right'}
-                            />
-                        </>)
-                        :
-                        (<>
-                            <CustomButton
-                                onClick={handleLogout}
-                                type={'contained'}
-                                text={'Déconnexion'}
-                                style={{ color: textColor }}
-                                iconPosition={'right'}
-                            />
+                        {!isLoggedIn ?
+                            (<>
+                                <CustomButton
+                                    onClick={handleLogin}
+                                    type={'contained'}
+                                    text={'Connexion'}
+                                    style={{ color: textColor }}
+                                    iconPosition={'right'}
+                                />
+                            </>)
+                            :
+                            (<>
+                                <CustomButton
+                                    onClick={handleLogout}
+                                    type={'contained'}
+                                    text={'Déconnexion'}
+                                    style={{ color: textColor }}
+                                    iconPosition={'right'}
+                                />
 
-                        </>)
-                    }
+                            </>)
+                        }
+                    </Container>
+
                 </Container>
             </Navbar>
         </header>
