@@ -84,6 +84,7 @@ export default function Accueil() {
       console.error('Erreur : ', error);
     }
   }
+
   const { properties } = useContext(PropertiesContext);
   // const properties = context.properties
   // console.log(properties.slice(-4));
@@ -98,7 +99,7 @@ export default function Accueil() {
             initialValues={{}}
             onSubmit={handleSearch}
           >
-            {({ values, handleChange, handleSubmit, errors }) => {
+            {({ values, handleChange, handleSubmit, handleReset, errors }) => {
               return (
                 <Box>
                   <Form onSubmit={handleSubmit}>
@@ -248,6 +249,7 @@ export default function Accueil() {
                         {
                           type: 'reset',
                           value: 'Réinitialiser',
+                          onClick: handleReset
                         },
                         //#endregion
                       ]}

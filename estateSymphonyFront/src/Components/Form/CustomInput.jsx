@@ -4,37 +4,21 @@ import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import { FormHelperText, IconButton, MenuItem, TextField } from "@mui/material"
 
-const CustomInput = ({ name, value, type, onChange, placeholder, label, required, error, secured, showPassword, handleClickShowPassword, inputType, items }) => {
+const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label, required, error, secured, showPassword, handleClickShowPassword, inputType, items }) => {
 
     return (
         <>
             {inputType === 'select' ? (
                 <>
                     <TextField
-                        sx={{ marginTop: 2, marginBottom: -0.5 }}
+                        sx={{ marginTop: 2, marginBottom: -0.5, width: 200 }}
                         select
                         name={name}
                         onChange={onChange}
-                        fullWidth
+                        onClick={onClick}
                         placeholder={placeholder}
                         label={label}
                         required={required}
-                        InputProps={{
-                            endAdornment: (
-                                secured ? !showPassword ? (
-                                    <IconButton onClick={handleClickShowPassword}>
-                                        <VisibilityOff />
-                                    </IconButton>
-
-                                ) : (
-                                    <IconButton onClick={handleClickShowPassword}>
-
-                                        <Visibility />
-                                    </IconButton>
-                                )
-                                    : null
-                            )
-                        }}
                     >
                         {items.map((item, _index) => (
                             <MenuItem key={item.id} value={item.id}>
@@ -47,12 +31,12 @@ const CustomInput = ({ name, value, type, onChange, placeholder, label, required
             ) : (
                 <>
                     <TextField
-                        sx={{ marginTop: 2, marginBottom: -0.5 }}
+                        sx={{ marginTop: 2, marginBottom: -0.5, width: 200 }}
                         name={name}
                         value={value}
                         type={secured ? (showPassword ? "text" : "password") : type}
                         onChange={onChange}
-                        fullWidth
+                        onClick={onClick}
                         placeholder={placeholder}
                         label={label}
                         required={required}
