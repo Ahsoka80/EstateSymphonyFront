@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
 import { Button } from "@mui/material";
 import useIcon from "../../utils/hooks/useIcon";

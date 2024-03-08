@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     getAllProperties()
       .then(dataa => {
-        setProperties(dataa.slice(-4)) // La fonction .slice() permet de d'afficher les dernières élément de la tableau dataa.
+        setProperties(dataa.slice(-4)) // La fonction .slice() permet de d'afficher les dernières élément du tableau dataa.
       })
   }, [])
 
