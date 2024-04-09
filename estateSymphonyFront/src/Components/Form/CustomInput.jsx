@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
-import { FormHelperText, IconButton, MenuItem, TextField } from "@mui/material"
+import { Checkbox, FormControl, FormControlLabel, FormHelperText, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 
 const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label, required, error, secured, showPassword, handleClickShowPassword, inputType, items }) => {
 
@@ -10,47 +10,67 @@ const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label,
         <>
             {inputType === 'select' ? (
                 <>
-                    <TextField
+                    <FormControl
                         sx={{ marginTop: 2, marginBottom: -0.5, width: 200 }}
-                        select
-                        name={name}
-                        onChange={onChange}
-                        onClick={onClick}
-                        placeholder={placeholder}
-                        label={label}
-                        required={required}
                     >
-                        {items.map((item, _index) => (
-                            <MenuItem key={item.id} value={item.id}>
-                                {item.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <FormHelperText sx={{ color: 'red', marginLeft: 1 }}>{error}</FormHelperText>
+                        <InputLabel id={`select-${name}`}>{label}</InputLabel>
+                        <Select
+                            labelId={`select-${name}`}
+                            name={name}
+                            onClick={onClick}
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            label={label}
+                            required={required}
+                        >
+                            {items.map((item, _index) => (
+                                <MenuItem key={item.id} value={item.id}>
+                                    {item.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <FormHelperText sx={{ color: 'red', marginLeft: 1 }}>{error}</FormHelperText>
+                    </FormControl>
                 </>
-            ) : (
+            ) : (type === 'checkbox' ? (
                 <>
-                    <TextField
+                    <FormControlLabel
                         sx={{ marginTop: 2, marginBottom: -0.5, width: 200 }}
                         name={name}
                         value={value}
-                        type={secured ? (showPassword ? "text" : "password") : type}
+                        control={<Checkbox />}
+                        label={label}
                         onChange={onChange}
                         onClick={onClick}
-                        placeholder={placeholder}
-                        label={label}
-                        required={required}
-                        InputProps={{
-                            endAdornment: secured && (
-                                <IconButton onClick={handleClickShowPassword}>
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            ),
-                        }}
+                        labelPlacement="end"
                     />
-                    <FormHelperText sx={{ color: 'red', marginLeft: 1 }}>{error}</FormHelperText>
                 </>
-            )}
+            ) : (
+                <>
+                    <FormControl>
+                        <TextField
+                            sx={{ marginTop: 2, marginBottom: -0.5, width: 200 }}
+                            name={name}
+                            value={value}
+                            type={secured ? (showPassword ? "text" : "password") : type}
+                            onChange={onChange}
+                            onClick={onClick}
+                            placeholder={placeholder}
+                            label={label}
+                            required={required}
+                            fullWidth
+                            InputProps={{
+                                endAdornment: secured && (
+                                    <IconButton onClick={handleClickShowPassword}>
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                ),
+                            }}
+                        />
+                        <FormHelperText sx={{ color: 'red', marginLeft: 1 }}>{error}</FormHelperText>
+                    </FormControl>
+                </>
+            ))}
         </>
     );
 }; export default CustomInput
