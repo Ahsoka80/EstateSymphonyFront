@@ -25,6 +25,7 @@ import { AuthContext } from '../../AuthContext/AuthContext';
 import { getAllFavorisByOne } from '../../utils/api/favoris';
 import { getUserEmail } from '../../utils/api/user';
 import { useEmail } from '../../utils/api/useEmail';
+import CustomCard from '../Card/CustomCard';
 
 const validation = Yup.object({
   energising: Yup.string()
@@ -74,7 +75,8 @@ export default function Accueil() {
   }
 
   let { properties } = useContext(PropertiesContext);
-  properties = properties.slice(-3);
+  console.log(properties);
+  properties = properties.slice(-5);
   return (
     <>
       <Container>
@@ -269,34 +271,21 @@ export default function Accueil() {
                   </Form>
                   {
                     (propertiesBySearch) ?
-                      <Col className='card'>
-                        <Typography>Résultat de la recherche : </Typography>
-                        {propertiesBySearch.map((item) => {
-                          return (
-                            <Card key={item.id} sx={{ maxWidth: 345 }}>
-                              <CardMedia
-                                sx={{ height: 140 }}
-                                image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
-                                title="green iguana"
-                              />
-                              <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                  {item.location}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                  Type : {item.houseType} <br></br>
-                                  Surface : {item.surface} <br></br>
-                                  Nombres de pièces : {item.room} <br></br>
-                                </Typography>
-                              </CardContent>
-                              <CardActions>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                              </CardActions>
-                            </Card>
-                          )
-                        })}
-                      </Col>
+                      <>
+                        <Typography sx={{ marginTop: 5 }}>Résultat de la recherche : </Typography>
+                        <Col className='card'>
+                          {propertiesBySearch.map((item, index) => {
+                            return (
+                              <CustomCard
+                                {...item}
+                                key={index}
+                                item={item}
+                              >
+                              </CustomCard>
+                            )
+                          })}
+                        </Col>
+                      </>
 
                       :
                       <>
@@ -318,32 +307,14 @@ export default function Accueil() {
           </Col>
 
           <Col className='card'>
-            {properties.map((item) => {
+            {properties.map((item, index) => {
               return (
-                <Card key={item.id} sx={{ maxWidth: 345 }}>
-                  <Link to={`/details/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
-                      title="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {item.location}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Type : {item.houseType} <br></br>
-                        Surface : {item.surface} <br></br>
-                        Nombres de pièces : {item.room} <br></br>
-                      </Typography>
-                    </CardContent>
-                  </Link>
-                  <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Learn More</Button>
-                  </CardActions>
-                </Card>
-              )
+                <CustomCard
+                  {...item}
+                  key={index}
+                  item={item}
+                >
+                </CustomCard>)
             })}
           </Col>
         </Row>
@@ -357,7 +328,7 @@ export default function Accueil() {
                 <Col className='card'>
                   {favoris.map((item) => {
                     return (
-                      <Card key={item.id} sx={{ maxWidth: 345 }}>
+                      <Card key={item.id} sx={{ width: 245, height: 350 }}>
                         <Link to={`/details/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                           <CardMedia
                             sx={{ height: 140 }}

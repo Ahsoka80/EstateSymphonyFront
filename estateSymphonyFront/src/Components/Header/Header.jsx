@@ -12,7 +12,6 @@ import { getUserEmail } from '../../utils/api/user';
 import { AuthContext } from '../../AuthContext/AuthContext';
 import { getAllProperties } from '../../utils/api/properties';
 import { IconButton } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = (props) => {
