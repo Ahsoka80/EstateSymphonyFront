@@ -11,6 +11,9 @@ import { useEmail } from '../../utils/api/useEmail';
 import { getUserEmail } from '../../utils/api/user';
 import { AuthContext } from '../../AuthContext/AuthContext';
 import { getAllProperties } from '../../utils/api/properties';
+import { IconButton } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = (props) => {
 
@@ -47,9 +50,9 @@ const Header = (props) => {
     const handleHome = () => {
         navigate('/');
     }
-    // const handleProfil = () => {
-    //     navigate('/profil');
-    // }
+    const handleProfil = () => {
+        navigate('/profil');
+    }
 
     const {
         title,
@@ -100,6 +103,13 @@ const Header = (props) => {
                                     style={{ color: textColor }}
                                     iconPosition={'right'}
                                 />
+                                <IconButton
+                                    onClick={handleProfil}
+                                    color='yellow'
+                                >
+                                    {/* <SettingsIcon /> */}
+                                    <AccountCircleIcon />
+                                </IconButton>
 
                             </>)
                         }

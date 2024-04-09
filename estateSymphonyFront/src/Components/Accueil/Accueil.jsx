@@ -13,14 +13,18 @@ import Col from 'react-bootstrap/esm/Col'
 
 import CustomForm from '../Form/CustomForm';
 // eslint-disable-next-line no-unused-vars
-import { Form, useNavigate } from 'react-router-dom';
+import { Form, Link, useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Box } from '@mui/material';
 import * as Yup from 'yup';
-import { getAllProperties, getPropertiesBySearch } from '../../utils/api/properties';
+import { getPropertiesBySearch } from '../../utils/api/properties';
 import CustomButton from '../Buttons/CustomButton';
 import { getAllDistricts } from '../../utils/api/districts';
 import { getAllStatuses } from '../../utils/api/statuses';
+import { AuthContext } from '../../AuthContext/AuthContext';
+import { getAllFavorisByOne } from '../../utils/api/favoris';
+import { getUserEmail } from '../../utils/api/user';
+import { useEmail } from '../../utils/api/useEmail';
 
 const validation = Yup.object({
   energising: Yup.string()
@@ -29,65 +33,48 @@ const validation = Yup.object({
 })
 
 export default function Accueil() {
-  // const navigate = useNavigate();
-  const [districts, setDistricts] = useState([])
+  const { isLoggedIn } = useContext(AuthContext);
+  const [propertiesBySearch, setPropertiesBySearch] = useState([]);
+  const [districts, setDistricts] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [idUser, setIdUser] = useState('');
+  const [favoris, setFavoris] = useState([]);
+  const email = useEmail();
   useEffect(() => {
     getAllDistricts()
-      .then(data => {
-        console.log(data);
-        setDistricts(data)
-      });
-    getAllStatuses()
-      .then(data => {
-        console.log(data);
-        setStatuses(data);
+      .then(data => { setDistricts(data); });
+    getAllStatuses().then(data => { setStatuses(data) })
+    if (isLoggedIn) {
+      getUserEmail(email).then(data => {
+        setIdUser(data.id);
       })
-  }, []);
+      if (idUser !== '') {
+        getAllFavorisByOne(idUser).then(data => { setFavoris(data.slice(-3)); })
+      }
+      getAllFavorisByOne(idUser).then(data => { setFavoris(data); })
+    }
+  }, [email, idUser, isLoggedIn]);
 
   statuses.forEach(status => {
     if (!status.hidden) {
       status.name = status.sold ? 'En vente' : (status.rent ? 'A louer' : 'Indisponible')
     }
-  });
+  })
 
-  const typeEnergicList = [
-    {
-      id: 'Electrique',
-      name: 'Electrique'
-    },
-    {
-      id: 'Gaz',
-      name: 'Gaz'
-    },
-    {
-      id: 'Fioul',
-      name: 'Fioul'
-    },
-  ]
-
+  const typeEnergicList = [{ id: 'Electrique', name: 'Electrique' }, { id: 'Gaz', name: 'Gaz' }, { id: 'Fioul', name: 'Fioul' },]
   const heatingSystems = [{ id: 'Pompe à chaleur', name: 'Pompe à chaleur' }, { id: 'Panneaux solaires', name: 'Panneaux solaires' }]
+  const energisingList = [{ id: 'A', name: 'A' }, { id: 'B', name: 'B' }, { id: 'C', name: 'C' }, { id: 'D', name: 'D' }, { id: 'E', name: 'E' }, { id: 'F', name: 'F' }, { id: 'G', name: 'G' },]
 
   const handleSearch = async (data) => {
-    let message = '';
     try {
-      message = await getAllProperties();
-      console.log('Toutes les propriétés : ');
-      console.log(message);
-      message = await getPropertiesBySearch(data);
-      if (message && message.length !== 0) {
-        console.log('Propriétés selon recherche : ');
-        console.log(message[0]);
-      }
-
+      setPropertiesBySearch(await getPropertiesBySearch(data));
     } catch (error) {
       console.error('Erreur : ', error);
     }
   }
 
-  const { properties } = useContext(PropertiesContext);
-  // const properties = context.properties
-  // console.log(properties.slice(-4));
+  let { properties } = useContext(PropertiesContext);
+  properties = properties.slice(-3);
   return (
     <>
       <Container>
@@ -96,7 +83,20 @@ export default function Accueil() {
           <h1 className='accueil'>Bonjour Accueil</h1>
           <Formik enableReinitialize
             validationSchema={validation}
-            initialValues={{}}
+            initialValues={{
+              price: '',
+              status: '',
+              energising: '',
+              floor: '',
+              parking: '',
+              balcony: '',
+              rooms: '',
+              showerRoom: '',
+              surface: '',
+              typeEnergic: '',
+              district: '',
+              heatingSystem: '',
+            }}
             onSubmit={handleSearch}
           >
             {({ values, handleChange, handleSubmit, handleReset, errors }) => {
@@ -138,6 +138,8 @@ export default function Accueil() {
                           label: 'Classe énergétique',
                           error: errors.energising,
                           required: false,
+                          inputType: 'select',
+                          items: energisingList,
                         },
                         //#endregion
                         //#region FLOOR
@@ -260,11 +262,49 @@ export default function Accueil() {
                       style={{ color: 'white' }}
                       type={'submit'}
                       size={'large'}
-                      fullWidth={true}
+                      fullWidth={false}
                       variant={'contained'}
                     >
                     </CustomButton>
                   </Form>
+                  {
+                    (propertiesBySearch) ?
+                      <Col className='card'>
+                        <Typography>Résultat de la recherche : </Typography>
+                        {propertiesBySearch.map((item) => {
+                          return (
+                            <Card key={item.id} sx={{ maxWidth: 345 }}>
+                              <CardMedia
+                                sx={{ height: 140 }}
+                                image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
+                                title="green iguana"
+                              />
+                              <CardContent>
+                                <Typography gutterBottom variant="h5" component="div">
+                                  {item.location}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  Type : {item.houseType} <br></br>
+                                  Surface : {item.surface} <br></br>
+                                  Nombres de pièces : {item.room} <br></br>
+                                </Typography>
+                              </CardContent>
+                              <CardActions>
+                                <Button size="small">Share</Button>
+                                <Button size="small">Learn More</Button>
+                              </CardActions>
+                            </Card>
+                          )
+                        })}
+                      </Col>
+
+                      :
+                      <>
+                        <Typography fullWidth>
+                          Aucune propriété correspond à votre recherche
+                        </Typography>
+                      </>
+                  }
                 </Box>
               )
             }}
@@ -281,20 +321,23 @@ export default function Accueil() {
             {properties.map((item) => {
               return (
                 <Card key={item.id} sx={{ maxWidth: 345 }}>
-                  <CardMedia
-                    sx={{ height: 140 }}
-                    image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
-                    title="green iguana"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.location}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Lizards are a widespread group of squamate reptiles, with over 6,000
-                      species, ranging across all continents except Antarctica
-                    </Typography>
-                  </CardContent>
+                  <Link to={`/details/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <CardMedia
+                      sx={{ height: 140 }}
+                      image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
+                      title="green iguana"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {item.location}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Type : {item.houseType} <br></br>
+                        Surface : {item.surface} <br></br>
+                        Nombres de pièces : {item.room} <br></br>
+                      </Typography>
+                    </CardContent>
+                  </Link>
                   <CardActions>
                     <Button size="small">Share</Button>
                     <Button size="small">Learn More</Button>
@@ -306,38 +349,51 @@ export default function Accueil() {
         </Row>
         <Row>
           <Col>
-            <span> Favories :</span>
+            <span> Favoris :</span>
           </Col>
           <Col>
+            {
+              (favoris && favoris.length !== 0) ?
+                <Col className='card'>
+                  {favoris.map((item) => {
+                    return (
+                      <Card key={item.id} sx={{ maxWidth: 345 }}>
+                        <Link to={`/details/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                          <CardMedia
+                            sx={{ height: 140 }}
+                            image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
+                            title="green iguana"
+                          />
+                          <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                              {item.location}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              Type : {item.houseType} <br></br>
+                              Surface : {item.surface} <br></br>
+                              Nombres de pièces : {item.room} <br></br>
+                            </Typography>
+                          </CardContent>
+                        </Link>
+                        <CardActions>
+                          <Button size="small">Share</Button>
+                          <Button size="small">Learn More</Button>
+                        </CardActions>
+                      </Card>
+
+                    )
+                  })}
+                </Col>
+                :
+                <>
+                  <Typography variant=''>
+                    Veuillez vous connecter/inscrire pour avoir des favoris
+                  </Typography>
+                </>
+            }
           </Col>
         </Row>
       </Container>
-
-      <div>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardMedia
-            sx={{ height: 140 }}
-            image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
-            title="green iguana"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000
-              species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
-      </div>
-
-
-
     </>
   )
 }
