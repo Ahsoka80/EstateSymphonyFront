@@ -14,6 +14,7 @@ import Account from "../Components/Profil/Account";
 import ProfilForm from "../Components/Profil/ProfilDetails";
 import ProfilPassword from "../Components/Profil/ProfilPassword";
 import Details from "../Components/Property/PropertyDetails";
+import CreateRealEstate from "../Components/Profil/CreateRealEstate";
 export const ConnectionNavigateur = () => {
   const router = createBrowserRouter([
     {
@@ -63,6 +64,10 @@ export const ConnectionNavigateur = () => {
         {
           path: '/profil/myestimates',
           element: <Estimates />
+        },
+        {
+          path: '/profil/createreal',
+          element: <CreateRealEstate />
         },
       ],
     }

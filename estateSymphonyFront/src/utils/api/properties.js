@@ -27,3 +27,27 @@ export const getProperty = async (id) => {
         console.error('Erreur récupération des propriétés de la recherche : ', error);
     }
 }
+
+export const postProperty = async (data) => {
+    try {
+        //Reconstruction des données du formulaire en format FormData
+        const formData = new FormData();
+        //Ajout des données du formulaire à l'objet formData
+        Object.keys(data).forEach(
+            key => {
+                if (Array.isArray(data[key])) {
+                    data[key].forEach(file => {
+                        formData.append(key, file);
+                    });
+                } else {
+                    formData.append(key, data[key]);
+                }
+            }
+        )
+        console.log(formData.values().toArray()[14]);
+        // const response = await instance.post(`property/create`, formData);
+        // return response.data;
+    } catch (error) {
+        console.error('Erreur récupération des propriétés de la recherche : ', error);
+    }
+}

@@ -57,8 +57,11 @@ export default function Accueil() {
   }, [email, idUser, isLoggedIn]);
 
   statuses.forEach(status => {
+    if (status.hidden) {
+      status.name = status.sold ? 'Vendu' : 'Loué';
+    }
     if (!status.hidden) {
-      status.name = status.sold ? 'En vente' : (status.rent ? 'A louer' : 'Indisponible')
+      status.name = status.sold ? 'En vente' : 'A louer';
     }
   })
 
