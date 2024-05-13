@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import Home from "@mui/icons-material/Home";
 import { useEmail } from "../../utils/api/useEmail";
 import { getUserEmail } from "../../utils/api/user";
