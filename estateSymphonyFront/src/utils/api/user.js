@@ -8,3 +8,12 @@ export const getUserEmail = async (email) => {
         console.error('Erreur survenue : ', error.message);
     }
 }
+
+export const getUserByRole = async (idRoles) => {
+    try {
+        const response = await instance.get(`users/${idRoles}`);
+        return response.data.data;
+    } catch (error) {
+        console.error('Erreur survenue : ', error.message);
+    }
+}
