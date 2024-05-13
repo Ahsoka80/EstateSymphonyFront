@@ -1,20 +1,39 @@
 import { Form, useNavigate } from "react-router-dom";
-import { Box, Button, Card, CardActions, CardContent, CardMedia, FormHelperText, IconButton, Typography } from "@mui/material";
+import { Box, FormHelperText, IconButton } from "@mui/material";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import Home from "@mui/icons-material/Home";
 import { AuthContext } from "../../AuthContext/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { useEmail } from "../../utils/api/useEmail";
-import { getUserEmail } from "../../utils/api/user";
-import { ErrorMessage, FieldArray, Formik } from "formik";
-import * as Yup from 'yup';
+import { getUserByRole, getUserEmail } from "../../utils/api/user";
+import { FieldArray, Formik } from "formik";
 import CustomForm from "../Form/CustomForm";
 import { getAllDistricts } from "../../utils/api/districts";
 import { getAllStatuses } from "../../utils/api/statuses";
 import CustomButton from "../Buttons/CustomButton";
 import { postProperty } from "../../utils/api/properties";
+import * as Yup from 'yup';
+
 
 const CreateRealEstate = () => {
+    //Validation des champs du formulaire de connexion
+    const validationSchema = Yup.object({
+        price: Yup.string()
+            .required('Ce champs est obligatoire')
+            .min(2, 'Le prix ne peut être inférieur à 10'),
+        surface: Yup.string().required('Ce champs est obligatoire'),
+        floor: Yup.string().required('Ce champs est obligatoire'),
+        parking: Yup.string().required('Ce champs est obligatoire'),
+        rooms: Yup.string().required('Ce champs est obligatoire'),
+        idStatuses: Yup.string().required('Ce champs est obligatoire'),
+        idDistricts: Yup.string().required('Ce champs est obligatoire'),
+        password: Yup.string()
+            .required('Ce champ est obligatoire')
+            .matches(/(?=.*[a-z])(?=.*[A-Z])\w+/, "Le mot de passe doit contenir au moins 1 minuscule et 1 majuscule")
+            .matches(/\d/, "Le mot de passe doit contenir au moins 1 chiffre")
+            .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, "Le mot de passe doit contenir au moins 1 caractère spécial")
+            .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
+    })
 
     const { isLoggedIn } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -22,23 +41,30 @@ const CreateRealEstate = () => {
     const [user, setUser] = useState(null);
     const [districts, setDistricts] = useState([]);
     const [statuses, setStatuses] = useState([]);
+    const [users, setUsers] = useState([]);
     const [creationErrors, setcreationErrors] = useState('');
-
     useEffect(() => {
         getAllDistricts()
             .then(data => { setDistricts(data); });
         getAllStatuses().then(data => { setStatuses(data) })
         if (isLoggedIn) {
+            let token = localStorage.getItem('token');
             getUserEmail(email).then(data => {
                 setUser(data);
                 if (data.idRoles > 3) { console.log('Utilisateur pas autorisé à être ici..'); navigate('/'); }
             })
+            getUserByRole(4).then(data => {
+                setUsers(data);
+            });
         } else {
             console.log('Utilisateur pas connecté, retour page d\'acceuil');
             navigate('/');
         }
     }, [email, isLoggedIn, navigate]);
 
+    users.forEach(user => {
+        user.name = `${user.firstname} ${user.lastname} (${user.email})`;
+    })
     statuses.forEach(status => {
         if (status.hidden) {
             status.name = status.sold ? 'Vendu' : 'Loué';
@@ -56,10 +82,15 @@ const CreateRealEstate = () => {
         navigate('/profil')
     }
     const handleCreate = async (values) => {
+
+        // let formData = new FormData();
+        // values.map((item)=>{
+
+        // })
         // Envoyer les données au serveur, y compris les noms des images
-        console.log(values);
+        // console.log(values);
         let message = await postProperty(values);
-        console.log(message.message);
+        // console.log(message.message);
         setcreationErrors(message.message);
     }
 
@@ -76,9 +107,9 @@ const CreateRealEstate = () => {
         balcony: 0,
         parking: 1,
         rooms: 3,
-        idStatuses: 2,
-        idDistricts: 81,
-        images: [],
+        // idStatuses: 0,
+        // idDistricts: 0,
+        // images: [],
     }
     return (
         <>
@@ -96,7 +127,7 @@ const CreateRealEstate = () => {
             </IconButton>
             {
                 <Formik
-                    // validationSchema={validationSchema}
+                    validationSchema={validationSchema}
                     enableReinitialize
                     initialValues={initialValues}
                     onSubmit={handleCreate}
@@ -245,24 +276,40 @@ const CreateRealEstate = () => {
                                                 inputType: 'select',
                                                 items: districts,
                                             },
+                                            {
+                                                name: 'idUsers',
+                                                value: values.idUsers,
+                                                type: 'number',
+                                                onChange: handleChange,
+                                                label: 'Propriétaire',
+                                                error: errors.idUsers,
+                                                required: true,
+                                                inputType: 'select',
+                                                items: users,
+                                            },
                                         ]}
                                     />
-                                    <FieldArray
+
+
+                                    {/* /// PROBLEME DE MULTER INSERTION DES PHOTOS : En attente de solution côté API */}
+
+                                    {/* <FieldArray
                                         name="images"
                                         render={({ push, remove }) => (
                                             <>
                                                 <input
                                                     type="file"
                                                     id="images"
-                                                    name="images"
                                                     accept="image/*"
-                                                    multiple
                                                     onChange={(event) => {
                                                         push(...event.currentTarget.files);
                                                     }}
                                                 />
 
-                                            </>)} />
+                                            </>)} /> */}
+
+
+
                                     <CustomButton
                                         onClick={handleSubmit}
                                         text={'Créer'}

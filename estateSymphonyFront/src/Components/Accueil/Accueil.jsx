@@ -79,7 +79,7 @@ export default function Accueil() {
 
   let { properties } = useContext(PropertiesContext);
   console.log(properties);
-  properties = properties.slice(-5);
+  properties = properties.slice(-4);
   return (
     <>
       <Container>

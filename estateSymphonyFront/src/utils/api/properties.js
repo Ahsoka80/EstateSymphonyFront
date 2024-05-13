@@ -30,9 +30,9 @@ export const getProperty = async (id) => {
 
 export const postProperty = async (data) => {
     try {
-        //Reconstruction des données du formulaire en format FormData
+        // //Reconstruction des données du formulaire en format FormData
         const formData = new FormData();
-        //Ajout des données du formulaire à l'objet formData
+        // //Ajout des données du formulaire à l'objet formData
         Object.keys(data).forEach(
             key => {
                 if (Array.isArray(data[key])) {
@@ -44,9 +44,9 @@ export const postProperty = async (data) => {
                 }
             }
         )
-        console.log(formData.values().toArray()[14]);
-        // const response = await instance.post(`property/create`, formData);
-        // return response.data;
+        // console.log(formData.values().toArray()[14]);
+        const response = await instance.post(`property/create`, formData);
+        return response.data;
     } catch (error) {
         console.error('Erreur récupération des propriétés de la recherche : ', error);
     }

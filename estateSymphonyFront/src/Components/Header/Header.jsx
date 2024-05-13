@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEmail } from '../../utils/api/useEmail';
 import { getUserEmail } from '../../utils/api/user';
 import { AuthContext } from '../../AuthContext/AuthContext';
-import { getAllProperties } from '../../utils/api/properties';
 import { IconButton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -27,16 +26,9 @@ const Header = (props) => {
                 setUserFirstname(data.firstname);
                 setUserLastname(data.lastname);
             })
-            getAllProperties().then(dataa => {
-                console.log(dataa);
-            })
-
             console.log('Utilisateur connecté');
         } else {
             console.log('Utilisateur déconnecté');
-            getAllProperties().then(dataa => {
-                console.log(dataa);
-            })
         }
     }, [isLoggedIn, email, userFirstname, userLastname])
     const handleLogout = () => {
