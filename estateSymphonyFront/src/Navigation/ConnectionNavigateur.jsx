@@ -17,6 +17,7 @@ import Details from "../Components/Property/PropertyDetails";
 import CreateRealEstate from "../Components/Profil/CreateRealEstate";
 import EstatesManager from "../Components/Dashboard/EstatesManage";
 import EstateDashboardUpdate from "../Components/Dashboard/EstateDashboardUpdate";
+import EstateDashboardCreate from "../Components/Dashboard/EstateDashboardCreate";
 
 
 export const ConnectionNavigateur = () => {
@@ -81,10 +82,10 @@ export const ConnectionNavigateur = () => {
           path: '/dashboard/estate/:id',
           element: <EstateDashboardUpdate />
         },
-        // {
-        //   path: '/dashboard/estate',
-        //   element: <EstateDashboardCreate />
-        // },
+        {
+          path: '/dashboard/estate/create',
+          element: <EstateDashboardCreate />
+        },
       ],
     }
   ])

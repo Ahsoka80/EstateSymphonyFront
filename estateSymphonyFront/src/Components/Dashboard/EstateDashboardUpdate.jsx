@@ -1,28 +1,28 @@
-import { useContext, useEffect, useState } from "react";
-import { Form, useParams } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Form, useNavigate, useParams } from "react-router-dom"
 import { getProperty, putProperty } from "../../utils/api/properties";
 import * as Yup from 'yup';
-import { AuthContext } from "../../AuthContext/AuthContext";
 import { getUserByRole } from "../../utils/api/user";
-import { Box, FormHelperText } from "@mui/material";
-import { Formik, useFormik } from "formik";
+import { Box, FormHelperText, IconButton } from "@mui/material";
+import { Formik } from "formik";
 import CustomForm from "../Form/CustomForm";
 import { getAllStatuses } from "../../utils/api/statuses";
 import { getAllDistricts } from "../../utils/api/districts";
 import CustomButton from "../Buttons/CustomButton";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 
 
 const EstateDashboardUpdate = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
-    const { isLoggedIn } = useContext(AuthContext);
     const [item, setItem] = useState({ price: 0, location: '', surface: 0, showerRoom: 0, energising: '', typeEnergic: '', description: '', heatingSystem: '', floor: 0, balcony: 0, parking: 0, rooms: 0, idStatuses: 0, idDistricts: 0, idUsers: 0 });
-    const [creationErrors, setcreationErrors] = useState('');
+    const [updateErrors, setUpdateErrors] = useState('');
+    const [updateSuccess, setUpdateSuccess] = useState('');
     const [statuses, setStatuses] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [users, setUsers] = useState([]);
     const [updateEnabled, setUpdateEnabled] = useState(false);
 
-    console.log(isLoggedIn);
     useEffect(() => {
         getAllDistricts()
             .then(data => {
@@ -71,15 +71,15 @@ const EstateDashboardUpdate = () => {
         rooms: Yup.string().required('Ce champs est obligatoire'),
         idStatuses: Yup.string().required('Ce champs est obligatoire'),
         idDistricts: Yup.string().required('Ce champs est obligatoire'),
-        password: Yup.string()
-            .required('Ce champ est obligatoire')
-            .matches(/(?=.*[a-z])(?=.*[A-Z])\w+/, "Le mot de passe doit contenir au moins 1 minuscule et 1 majuscule")
-            .matches(/\d/, "Le mot de passe doit contenir au moins 1 chiffre")
-            .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, "Le mot de passe doit contenir au moins 1 caractère spécial")
-            .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
     })
+
+    //NAVIGATION
+    const handleBack = () => {
+        navigate('/dashboard/estates');
+    }
     const handleUpdate = async (values) => {
-        console.log(values);
+        setUpdateSuccess('En cours de modification..');
+        setUpdateErrors('');
         // let formData = new FormData();
         // values.map((item)=>{
 
@@ -87,8 +87,9 @@ const EstateDashboardUpdate = () => {
         // Envoyer les données au serveur, y compris les noms des images
         // console.log(values);
         let message = await putProperty(values, id);
-        // console.log(message.message);
-        setcreationErrors(message.message);
+        let Successful = message.message.split(' ')[1] === 'modifiée';
+        Successful ? setUpdateSuccess(message.message) : setUpdateErrors(message.message);
+        // Successful ? handleBack() : '';
     }
 
     const initialValues = {
@@ -110,9 +111,15 @@ const EstateDashboardUpdate = () => {
     }
     return (
         <>
+            <IconButton
+                color="info"
+                onClick={handleBack}
+            >
+                <ArrowBack />
+            </IconButton>
             {
                 <Formik
-                    // validationSchema={validationSchema}
+                    validationSchema={validationSchema}
                     enableReinitialize
                     initialValues={initialValues}
                     onSubmit={handleUpdate}
@@ -261,17 +268,17 @@ const EstateDashboardUpdate = () => {
                                                 inputType: 'select',
                                                 items: districts,
                                             },
-                                            {
-                                                name: 'idUsers',
-                                                value: values.idUsers,
-                                                type: 'number',
-                                                onChange: handleChange,
-                                                label: 'Propriétaire',
-                                                error: errors.idUsers,
-                                                required: true,
-                                                inputType: 'select',
-                                                items: users,
-                                            },
+                                            // {
+                                            //     name: 'idUsers',
+                                            //     value: values.idUsers,
+                                            //     type: 'number',
+                                            //     onChange: handleChange,
+                                            //     label: 'Propriétaire',
+                                            //     error: errors.idUsers,
+                                            //     required: true,
+                                            //     inputType: 'select',
+                                            //     items: users,
+                                            // },
                                         ]}
                                     />
 
@@ -307,7 +314,8 @@ const EstateDashboardUpdate = () => {
                                         >
                                         </CustomButton>
                                     </>
-                                    <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{creationErrors}</FormHelperText>
+                                    <FormHelperText sx={{ color: 'green', marginLeft: 1, justifyContent: "center" }}>{updateSuccess}</FormHelperText>
+                                    <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{updateErrors}</FormHelperText>
                                 </Form>
                             </Box>
 

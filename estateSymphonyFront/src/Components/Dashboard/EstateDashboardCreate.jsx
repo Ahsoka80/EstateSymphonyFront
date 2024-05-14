@@ -1,45 +1,40 @@
 import { Form, useNavigate } from "react-router-dom";
-import { Box, FormHelperText, IconButton } from "@mui/material";
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import Home from "@mui/icons-material/Home";
-import { AuthContext } from "../../AuthContext/AuthContext";
-import { useContext, useEffect, useState } from "react";
-import { useEmail } from "../../utils/api/useEmail";
-import { getUserByRole, getUserEmail } from "../../utils/api/user";
-import { FieldArray, Formik } from "formik";
-import CustomForm from "../Form/CustomForm";
 import { getAllDistricts } from "../../utils/api/districts";
+import { getUserByRole } from "../../utils/api/user";
 import { getAllStatuses } from "../../utils/api/statuses";
-import CustomButton from "../Buttons/CustomButton";
+import { useEffect, useState } from "react";
 import { postProperty } from "../../utils/api/properties";
 import * as Yup from 'yup';
+import CustomButton from "../Buttons/CustomButton";
+import { Box, FormHelperText, IconButton } from "@mui/material";
+import CustomForm from "../Form/CustomForm";
+import { Formik } from "formik";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 
 
-const CreateRealEstate = () => {
-    const { isLoggedIn } = useContext(AuthContext);
+
+const EstateDashboardCreate = () => {
+
     const navigate = useNavigate();
-    const email = useEmail();
-    const [districts, setDistricts] = useState([]);
+    const [creationErrors, setCreationErrors] = useState('');
+    const [creationSuccess, setCreationSuccess] = useState('');
     const [statuses, setStatuses] = useState([]);
+    const [districts, setDistricts] = useState([]);
     const [users, setUsers] = useState([]);
-    const [creationErrors, setcreationErrors] = useState('');
+
+    //USE EFFECT
     useEffect(() => {
         getAllDistricts()
-            .then(data => { setDistricts(data); });
-        getAllStatuses().then(data => { setStatuses(data) })
-        if (isLoggedIn) {
-            getUserEmail(email).then(data => {
-                if (data.idRoles > 3) { console.log('Utilisateur pas autorisé à être ici..'); navigate('/'); }
-            })
-            getUserByRole(4).then(data => {
-                setUsers(data);
+            .then(data => {
+                setDistricts(data);
             });
-        } else {
-            console.log('Utilisateur pas connecté, retour page d\'acceuil');
-            navigate('/');
-        }
-    }, [email, isLoggedIn, navigate]);
+        getUserByRole(4).then(data => {
+            setUsers(data);
+        });
+        getAllStatuses().then(data => { setStatuses(data) })
+    }, [])
 
+    //Modification des données utilisateurs et des status pour affichage dans les select
     users.forEach(user => {
         user.name = `${user.firstname} ${user.lastname} (${user.email})`;
     })
@@ -51,16 +46,15 @@ const CreateRealEstate = () => {
             status.name = status.sold ? 'En vente' : 'A louer';
         }
     })
-    const handleHome = () => {
-        console.log('Retour page d\'accueil..');
-        navigate('/')
-    }
-    const handleBack = () => {
-        console.log(('Retour en page précédente..'));
-        navigate('/profil')
-    }
-    const handleCreate = async (values) => {
 
+    //NAVIGATION
+    const handleBack = () => {
+        navigate('/dashboard/estates');
+    }
+    //HANDLE CREATE
+    const handleCreate = async (values) => {
+        setCreationSuccess('En cours de création..');
+        setCreationErrors('');
         // let formData = new FormData();
         // values.map((item)=>{
 
@@ -68,11 +62,12 @@ const CreateRealEstate = () => {
         // Envoyer les données au serveur, y compris les noms des images
         // console.log(values);
         let message = await postProperty(values);
-        // console.log(message.message);
-        setcreationErrors(message.message);
+        let Successful = message.message.split(' ')[1] === 'créée';
+        Successful ? setCreationSuccess(message.message) : setCreationErrors(message.message);
+        Successful ? handleBack() : '';
     }
 
-    //Validation des champs du formulaire de création d'un bien
+    //VALIDATION SCHEMA
     const validationSchema = Yup.object({
         price: Yup.string()
             .required('Ce champs est obligatoire')
@@ -85,7 +80,7 @@ const CreateRealEstate = () => {
         idDistricts: Yup.string().required('Ce champs est obligatoire'),
     })
 
-
+    //INITIAL VALUES
     const initialValues = {
         price: 500,
         location: '',
@@ -111,12 +106,6 @@ const CreateRealEstate = () => {
             >
                 <ArrowBack />
             </IconButton>
-            <IconButton
-                color="info"
-                onClick={handleHome}
-            >
-                <Home />
-            </IconButton>
             {
                 <Formik
                     validationSchema={validationSchema}
@@ -128,7 +117,7 @@ const CreateRealEstate = () => {
                         return (
                             <Box sx={{ '& button': { marginTop: 2 } }}>
                                 <h2>Création d&apos;un bien immobilier</h2>
-                                <Form onSubmit={handleSubmit} enctype="multipart/form-data">
+                                <Form onSubmit={handleSubmit} encType="multipart/form-data">
                                     <CustomForm
                                         inputs={[
                                             {
@@ -268,17 +257,17 @@ const CreateRealEstate = () => {
                                                 inputType: 'select',
                                                 items: districts,
                                             },
-                                            {
-                                                name: 'idUsers',
-                                                value: values.idUsers,
-                                                type: 'number',
-                                                onChange: handleChange,
-                                                label: 'Propriétaire',
-                                                error: errors.idUsers,
-                                                required: true,
-                                                inputType: 'select',
-                                                items: users,
-                                            },
+                                            // {
+                                            //     name: 'idUsers',
+                                            //     value: values.idUsers,
+                                            //     type: 'number',
+                                            //     onChange: handleChange,
+                                            //     label: 'Propriétaire',
+                                            //     error: errors.idUsers,
+                                            //     required: true,
+                                            //     inputType: 'select',
+                                            //     items: users,
+                                            // },
                                         ]}
                                     />
 
@@ -286,32 +275,34 @@ const CreateRealEstate = () => {
                                     {/* /// PROBLEME DE MULTER INSERTION DES PHOTOS : En attente de solution côté API */}
 
                                     {/* <FieldArray
-                                        name="images"
-                                        render={({ push, remove }) => (
-                                            <>
-                                                <input
-                                                    type="file"
-                                                    id="images"
-                                                    accept="image/*"
-                                                    onChange={(event) => {
-                                                        push(...event.currentTarget.files);
-                                                    }}
-                                                />
+                                name="images"
+                                render={({ push, remove }) => (
+                                    <>
+                                        <input
+                                            type="file"
+                                            id="images"
+                                            accept="image/*"
+                                            onChange={(event) => {
+                                                push(...event.currentTarget.files);
+                                            }}
+                                        />
 
-                                            </>)} /> */}
+                                    </>)} /> */}
 
 
-
-                                    <CustomButton
-                                        onClick={handleSubmit}
-                                        text={'Créer'}
-                                        style={{ color: 'white' }}
-                                        type={'submit'}
-                                        size={'large'}
-                                        fullwidth={false}
-                                        variant={'contained'}
-                                    >
-                                    </CustomButton>
+                                    <>
+                                        <CustomButton
+                                            onClick={handleSubmit}
+                                            text={'Créer'}
+                                            style={{ color: 'white' }}
+                                            type={'submit'}
+                                            size={'large'}
+                                            fullwidth={false}
+                                            variant={'contained'}
+                                        >
+                                        </CustomButton>
+                                    </>
+                                    <FormHelperText sx={{ color: 'green', marginLeft: 1, justifyContent: "center" }}>{creationSuccess}</FormHelperText>
                                     <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{creationErrors}</FormHelperText>
                                 </Form>
                             </Box>
@@ -320,7 +311,10 @@ const CreateRealEstate = () => {
                     }}
                 </Formik>
             }
+
         </>
     )
+
 }
-export default CreateRealEstate
+
+export default EstateDashboardCreate;
