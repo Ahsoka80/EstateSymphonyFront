@@ -34,6 +34,7 @@ const Header = (props) => {
     const handleLogout = () => {
         console.log('Déconnexion utilisateur..');
         logout();
+        navigate('/');
     };
     const handleLogin = () => {
         navigate('/login');

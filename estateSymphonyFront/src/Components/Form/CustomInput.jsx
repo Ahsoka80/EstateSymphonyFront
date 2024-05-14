@@ -5,7 +5,6 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import { Checkbox, FormControl, FormControlLabel, FormHelperText, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 
 const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label, required, error, secured, showPassword, handleClickShowPassword, inputType, items }) => {
-
     return (
         <>
             {inputType === 'select' ? (
@@ -15,6 +14,7 @@ const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label,
                     >
                         <InputLabel id={`select-${name}`}>{label}</InputLabel>
                         <Select
+                            value={value}
                             labelId={`select-${name}`}
                             name={name}
                             onClick={onClick}
@@ -22,12 +22,15 @@ const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label,
                             placeholder={placeholder}
                             label={label}
                             required={required}
+
                         >
-                            {items.map((item, _index) => (
-                                <MenuItem key={item.id} value={item.id}>
-                                    {item.name}
-                                </MenuItem>
-                            ))}
+                            {items.map((item, _index) => {
+                                return (
+                                    <MenuItem key={item.id} value={item.id}>
+                                        {item.name}
+                                    </MenuItem>
+                                )
+                            })}
                         </Select>
                         <FormHelperText sx={{ color: 'red', marginLeft: 1 }}>{error}</FormHelperText>
                     </FormControl>

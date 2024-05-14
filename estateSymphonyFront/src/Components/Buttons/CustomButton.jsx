@@ -14,7 +14,7 @@ const CustomButton = (props) => {
         size,
         fullWidth,
         color,
-
+        isEnabled,
 
     } = props;
     return (
@@ -35,6 +35,8 @@ const CustomButton = (props) => {
             size={size}
             fullWidth={fullWidth}
             color={color}
+            disabled={isEnabled}
+            type={type}
         >
             {text}
         </Button>

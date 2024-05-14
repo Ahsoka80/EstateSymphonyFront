@@ -51,3 +51,25 @@ export const postProperty = async (data) => {
         console.error('Erreur récupération des propriétés de la recherche : ', error);
     }
 }
+
+export const putProperty = async (data, id) => {
+    try {
+        const formData = new FormData();
+        Object.keys(data).forEach(
+            key => {
+                if (Array.isArray(data[key])) {
+                    data[key].forEach(file => {
+                        formData.append(key, file);
+                    });
+                } else {
+                    formData.append(key, data[key]);
+                }
+            }
+        )
+        const response = await instance.put(`/property/modify/${id}`, formData);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur récupération des propriétés de la recherche : ', error);
+
+    }
+}

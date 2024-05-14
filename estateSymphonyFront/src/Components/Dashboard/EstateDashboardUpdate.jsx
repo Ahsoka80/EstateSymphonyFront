@@ -1,44 +1,52 @@
-import { Form, useNavigate } from "react-router-dom";
-import { Box, FormHelperText, IconButton } from "@mui/material";
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import Home from "@mui/icons-material/Home";
-import { AuthContext } from "../../AuthContext/AuthContext";
 import { useContext, useEffect, useState } from "react";
-import { useEmail } from "../../utils/api/useEmail";
-import { getUserByRole, getUserEmail } from "../../utils/api/user";
-import { FieldArray, Formik } from "formik";
-import CustomForm from "../Form/CustomForm";
-import { getAllDistricts } from "../../utils/api/districts";
-import { getAllStatuses } from "../../utils/api/statuses";
-import CustomButton from "../Buttons/CustomButton";
-import { postProperty } from "../../utils/api/properties";
+import { Form, useParams } from "react-router-dom"
+import { getProperty, putProperty } from "../../utils/api/properties";
 import * as Yup from 'yup';
+import { AuthContext } from "../../AuthContext/AuthContext";
+import { getUserByRole } from "../../utils/api/user";
+import { Box, FormHelperText } from "@mui/material";
+import { Formik, useFormik } from "formik";
+import CustomForm from "../Form/CustomForm";
+import { getAllStatuses } from "../../utils/api/statuses";
+import { getAllDistricts } from "../../utils/api/districts";
+import CustomButton from "../Buttons/CustomButton";
 
 
-const CreateRealEstate = () => {
+const EstateDashboardUpdate = () => {
+    const { id } = useParams();
     const { isLoggedIn } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const email = useEmail();
-    const [districts, setDistricts] = useState([]);
-    const [statuses, setStatuses] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [item, setItem] = useState({ price: 0, location: '', surface: 0, showerRoom: 0, energising: '', typeEnergic: '', description: '', heatingSystem: '', floor: 0, balcony: 0, parking: 0, rooms: 0, idStatuses: 0, idDistricts: 0, idUsers: 0 });
     const [creationErrors, setcreationErrors] = useState('');
+    const [statuses, setStatuses] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [updateEnabled, setUpdateEnabled] = useState(false);
+
+    console.log(isLoggedIn);
     useEffect(() => {
         getAllDistricts()
-            .then(data => { setDistricts(data); });
-        getAllStatuses().then(data => { setStatuses(data) })
-        if (isLoggedIn) {
-            getUserEmail(email).then(data => {
-                if (data.idRoles > 3) { console.log('Utilisateur pas autorisé à être ici..'); navigate('/'); }
-            })
-            getUserByRole(4).then(data => {
-                setUsers(data);
+            .then(data => {
+                setDistricts(data);
             });
-        } else {
-            console.log('Utilisateur pas connecté, retour page d\'acceuil');
-            navigate('/');
-        }
-    }, [email, isLoggedIn, navigate]);
+        getProperty(id).then(data => {
+            setItem(data);
+            console.log(data);
+        });
+        getUserByRole(4).then(data => {
+            setUsers(data);
+        });
+        getAllStatuses().then(data => { setStatuses(data) })
+    }, [id])
+
+
+    // useEffect(() => {
+    //     if (item != Formik.values) {
+    //         setUpdateEnabled(true);
+    //     } else {
+    //         setUpdateEnabled(false);
+    //     }
+    //     console.log(updateEnabled);
+    // }, [Formik.values])
 
     users.forEach(user => {
         user.name = `${user.firstname} ${user.lastname} (${user.email})`;
@@ -51,28 +59,8 @@ const CreateRealEstate = () => {
             status.name = status.sold ? 'En vente' : 'A louer';
         }
     })
-    const handleHome = () => {
-        console.log('Retour page d\'accueil..');
-        navigate('/')
-    }
-    const handleBack = () => {
-        console.log(('Retour en page précédente..'));
-        navigate('/profil')
-    }
-    const handleCreate = async (values) => {
 
-        // let formData = new FormData();
-        // values.map((item)=>{
-
-        // })
-        // Envoyer les données au serveur, y compris les noms des images
-        // console.log(values);
-        let message = await postProperty(values);
-        // console.log(message.message);
-        setcreationErrors(message.message);
-    }
-
-    //Validation des champs du formulaire de création d'un bien
+    //Validation des champs du formulaire de modification d'un bien
     const validationSchema = Yup.object({
         price: Yup.string()
             .required('Ce champs est obligatoire')
@@ -90,51 +78,50 @@ const CreateRealEstate = () => {
             .matches(/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, "Le mot de passe doit contenir au moins 1 caractère spécial")
             .min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
     })
+    const handleUpdate = async (values) => {
+        console.log(values);
+        // let formData = new FormData();
+        // values.map((item)=>{
 
+        // })
+        // Envoyer les données au serveur, y compris les noms des images
+        // console.log(values);
+        let message = await putProperty(values, id);
+        // console.log(message.message);
+        setcreationErrors(message.message);
+    }
 
     const initialValues = {
-        price: 500,
-        location: '',
-        surface: 50,
-        showerRoom: 1,
-        energising: 'C',
-        typeEnergic: 'Gaz',
-        description: '',
-        heatingSystem: 'Pompe à chaleur',
-        floor: 1,
-        balcony: 0,
-        parking: 1,
-        rooms: 3,
-        // idStatuses: 0,
-        // idDistricts: 0,
-        // images: [],
+        price: item.price,
+        location: item.location,
+        surface: item.surface,
+        showerRoom: item.showerRoom,
+        energising: item.energising,
+        typeEnergic: item.typeEnergic,
+        description: item.description,
+        heatingSystem: item.heatingSystem,
+        floor: item.floor,
+        balcony: item.balcony,
+        parking: item.parking,
+        rooms: item.rooms,
+        idStatuses: item.idStatuses,
+        idDistricts: item.idDistricts,
+        // idUsers: item.idUsers,
     }
     return (
         <>
-            <IconButton
-                color="info"
-                onClick={handleBack}
-            >
-                <ArrowBack />
-            </IconButton>
-            <IconButton
-                color="info"
-                onClick={handleHome}
-            >
-                <Home />
-            </IconButton>
             {
                 <Formik
-                    validationSchema={validationSchema}
+                    // validationSchema={validationSchema}
                     enableReinitialize
                     initialValues={initialValues}
-                    onSubmit={handleCreate}
+                    onSubmit={handleUpdate}
                 >
                     {({ values, handleChange, handleSubmit, errors }) => {
                         return (
                             <Box sx={{ '& button': { marginTop: 2 } }}>
-                                <h2>Création d&apos;un bien immobilier</h2>
-                                <Form onSubmit={handleSubmit} enctype="multipart/form-data">
+                                <h2>Modification d&apos;un bien immobilier</h2>
+                                <Form onSubmit={handleSubmit} encType="multipart/form-data">
                                     <CustomForm
                                         inputs={[
                                             {
@@ -292,32 +279,34 @@ const CreateRealEstate = () => {
                                     {/* /// PROBLEME DE MULTER INSERTION DES PHOTOS : En attente de solution côté API */}
 
                                     {/* <FieldArray
-                                        name="images"
-                                        render={({ push, remove }) => (
-                                            <>
-                                                <input
-                                                    type="file"
-                                                    id="images"
-                                                    accept="image/*"
-                                                    onChange={(event) => {
-                                                        push(...event.currentTarget.files);
-                                                    }}
-                                                />
+                                name="images"
+                                render={({ push, remove }) => (
+                                    <>
+                                        <input
+                                            type="file"
+                                            id="images"
+                                            accept="image/*"
+                                            onChange={(event) => {
+                                                push(...event.currentTarget.files);
+                                            }}
+                                        />
 
-                                            </>)} /> */}
+                                    </>)} /> */}
 
 
-
-                                    <CustomButton
-                                        onClick={handleSubmit}
-                                        text={'Créer'}
-                                        style={{ color: 'white' }}
-                                        type={'submit'}
-                                        size={'large'}
-                                        fullwidth={false}
-                                        variant={'contained'}
-                                    >
-                                    </CustomButton>
+                                    <>
+                                        <CustomButton
+                                            onClick={handleSubmit}
+                                            text={'Modifier'}
+                                            style={{ color: 'white' }}
+                                            type={'submit'}
+                                            size={'large'}
+                                            fullwidth={false}
+                                            variant={'contained'}
+                                            isEnabled={updateEnabled}
+                                        >
+                                        </CustomButton>
+                                    </>
                                     <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{creationErrors}</FormHelperText>
                                 </Form>
                             </Box>
@@ -327,6 +316,9 @@ const CreateRealEstate = () => {
                 </Formik>
             }
         </>
+
     )
+
 }
-export default CreateRealEstate
+
+export default EstateDashboardUpdate

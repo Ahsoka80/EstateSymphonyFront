@@ -15,6 +15,10 @@ import ProfilForm from "../Components/Profil/ProfilDetails";
 import ProfilPassword from "../Components/Profil/ProfilPassword";
 import Details from "../Components/Property/PropertyDetails";
 import CreateRealEstate from "../Components/Profil/CreateRealEstate";
+import EstatesManager from "../Components/Dashboard/EstatesManage";
+import EstateDashboardUpdate from "../Components/Dashboard/EstateDashboardUpdate";
+
+
 export const ConnectionNavigateur = () => {
   const router = createBrowserRouter([
     {
@@ -69,6 +73,18 @@ export const ConnectionNavigateur = () => {
           path: '/profil/createreal',
           element: <CreateRealEstate />
         },
+        {
+          path: '/dashboard/estates',
+          element: <EstatesManager />
+        },
+        {
+          path: '/dashboard/estate/:id',
+          element: <EstateDashboardUpdate />
+        },
+        // {
+        //   path: '/dashboard/estate',
+        //   element: <EstateDashboardCreate />
+        // },
       ],
     }
   ])
