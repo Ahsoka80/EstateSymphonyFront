@@ -29,18 +29,20 @@ const themeLight = createTheme({
 function App() {
 
   const [properties, setProperties] = useState([])
+
+  const fetchAllProperties = async () => {
+    const data = await getAllProperties();
+    setProperties(data);
+    console.log('Actualisation des propriétés du context');
+  }
   useEffect(() => {
-    getAllProperties()
-      .then(dataa => {
-        console.log(dataa);
-        setProperties(dataa) // La fonction .slice() permet de d'afficher les dernières élément du tableau dataa.
-      })
+    fetchAllProperties();
   }, [])
 
   return (
     <ThemeProvider theme={themeLight}>
       <AuthProvider>
-        <PropertiesContext.Provider value={{ properties: properties }}>
+        <PropertiesContext.Provider value={{ properties, fetchAllProperties }}>
           <ConnectionNavigateur />
         </PropertiesContext.Provider>
       </AuthProvider>

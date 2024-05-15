@@ -1,6 +1,7 @@
+import './Dashboard.css'
 import Row from "react-bootstrap/esm/Row";
 import Col from 'react-bootstrap/esm/Col';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import PropertiesContext from '../../context/propertieContext';
 import CustomCard from '../Card/CustomCard';
 import AddIcon from '@mui/icons-material/Add';
@@ -8,6 +9,10 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const EstatesManager = () => {
+    const { fetchAllProperties } = useContext(PropertiesContext)
+    useEffect(() => {
+        fetchAllProperties();
+    }, [])
     const navigate = useNavigate();
     const handleToAdd = () => {
         navigate('/dashboard/estate/create');
@@ -22,7 +27,7 @@ const EstatesManager = () => {
             <Button onClick={handleToAdd}>
                 <AddIcon fontSize="large" style={{ color: "Blue" }}></AddIcon>
             </Button>
-            <Col className="Card">
+            <Col className="card">
                 {properties.map((item, index) => {
                     return (
                         <CustomCard

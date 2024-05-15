@@ -5,13 +5,18 @@ import { Link } from "react-router-dom";
 import ArchiveIcon from '@mui/icons-material/Archive';
 import RestoreIcon from '@mui/icons-material/Restore';
 import { archiveProperty, restoreProperty } from "../../utils/api/properties";
+import { useContext } from "react";
+import PropertiesContext from "../../context/propertieContext";
+
 
 const CustomCard = ({ item, dashboard, archived }) => {
+    const { fetchAllProperties } = useContext(PropertiesContext);
     let description = item.description;
     let destination = dashboard ? `/dashboard/estate/${item.id}` : `/details/${item.id}`;
     const handleArchive = async (id) => {
         try {
             const response = await archiveProperty(id);
+            await fetchAllProperties();
             console.log(response);
         } catch (error) {
             console.error("Erreur lors de l'archivage de la propriété:", error);
@@ -20,6 +25,7 @@ const CustomCard = ({ item, dashboard, archived }) => {
     const handleRestore = async (id) => {
         try {
             const response = await restoreProperty(id);
+            await fetchAllProperties();
             console.log(response);
         } catch (error) {
             console.error("Erreur lors de la restauration de la propriété:", error);
