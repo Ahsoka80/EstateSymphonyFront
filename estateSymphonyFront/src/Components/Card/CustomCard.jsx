@@ -48,8 +48,8 @@ const CustomCard = ({ item, dashboard, archived }) => {
                         <Typography variant="body2" color="text.secondary">
                             Prix : {item.price}<br></br>
                             Type : {description.length > 30 ? description.substring(0, 30) + '...' : description} <br></br>
-                            Surface : {item.surface} <br></br>
-                            Nombres de pièces : {item.rooms} <br></br>
+                            {item.surface} m²<br></br>
+                            {item.rooms} pièces<br></br>
                         </Typography>
                     </CardContent>
                 </Link>
