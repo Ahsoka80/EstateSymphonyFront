@@ -5,7 +5,7 @@ export const getAllProperties = async () => {
         const response = await instance.get(`properties`);
         return response.data.data;
     } catch (error) {
-        console.error('Erreur survenue : ', error.message);
+        console.error('Erreur récupération de toutes les propriétés : ', error.message);
     }
 }
 
@@ -24,7 +24,7 @@ export const getProperty = async (id) => {
         const response = await instance.get(`property/${id}`);
         return response.data.data;
     } catch (error) {
-        console.error('Erreur récupération des propriétés de la recherche : ', error);
+        console.error('Erreur récupération de la propriété recherchée : ', error);
     }
 }
 
@@ -48,7 +48,7 @@ export const postProperty = async (data) => {
         const response = await instance.post(`property/create`, formData);
         return response.data;
     } catch (error) {
-        console.error('Erreur récupération des propriétés de la recherche : ', error);
+        console.error('Erreur création de la propriété : ', error);
     }
 }
 
@@ -69,7 +69,24 @@ export const putProperty = async (data, id) => {
         const response = await instance.put(`/property/modify/${id}`, formData);
         return response.data;
     } catch (error) {
-        console.error('Erreur récupération des propriétés de la recherche : ', error);
+        console.error('Erreur modification de la propriété : ', error);
 
+    }
+}
+
+export const archiveProperty = async (id) => {
+    try {
+        const response = await instance.put(`property/archive/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur archivage de la propriété : ', error);
+    }
+}
+export const restoreProperty = async (id) => {
+    try {
+        const response = await instance.put(`property/restore/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur restauration de la propriété : ', error);
     }
 }

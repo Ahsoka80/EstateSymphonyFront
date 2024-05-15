@@ -12,6 +12,7 @@ import { getUserEmail } from '../../utils/api/user';
 import { AuthContext } from '../../AuthContext/AuthContext';
 import { IconButton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const Header = (props) => {
 
@@ -19,18 +20,20 @@ const Header = (props) => {
     const navigate = useNavigate();
     const [userFirstname, setUserFirstname] = useState(' ');
     const [userLastname, setUserLastname] = useState(' ');
+    const [userIdRoles, setUserIdRoles] = useState(10);
     const email = useEmail();
     useEffect(() => {
         if (isLoggedIn) {
             getUserEmail(email).then(data => {
                 setUserFirstname(data.firstname);
                 setUserLastname(data.lastname);
+                setUserIdRoles(data.idRoles);
             })
             console.log('Utilisateur connecté');
         } else {
             console.log('Utilisateur déconnecté');
         }
-    }, [isLoggedIn, email, userFirstname, userLastname])
+    }, [isLoggedIn, email, userFirstname, userLastname, userIdRoles])
     const handleLogout = () => {
         console.log('Déconnexion utilisateur..');
         logout();
@@ -44,6 +47,9 @@ const Header = (props) => {
     }
     const handleProfil = () => {
         navigate('/profil');
+    }
+    const handleDashboard = () => {
+        navigate('/dashboard/estates') //A MODIFIER, estates c'est pour simplifier la mise en place de la partie de gestion des biens
     }
 
     const {
@@ -97,11 +103,23 @@ const Header = (props) => {
                                 />
                                 <IconButton
                                     onClick={handleProfil}
-                                    color='yellow'
+                                    color='inherit'
+                                    size='large'
                                 >
-                                    {/* <SettingsIcon /> */}
                                     <AccountCircleIcon />
                                 </IconButton>
+                                {
+                                    userIdRoles < 4 ?
+                                        <>
+                                            <IconButton
+                                                onClick={handleDashboard}
+                                                color='inherit'>
+                                                <DashboardIcon />
+                                            </IconButton>
+                                        </>
+                                        :
+                                        <></>
+                                }
 
                             </>)
                         }
