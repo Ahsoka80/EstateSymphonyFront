@@ -22,13 +22,10 @@ const EstateDashboardCreate = () => {
     const [statuses, setStatuses] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [users, setUsers] = useState([]);
-
+    const booleenNumber = [{ id: 0, name: 'Non' }, { id: 1, name: 'Oui' }];
     //USE EFFECT
     useEffect(() => {
-        getAllDistricts()
-            .then(data => {
-                setDistricts(data);
-            });
+        getAllDistricts().then(data => { setDistricts(data); });
         getUserByRole(4).then(data => {
             setUsers(data);
         });
@@ -71,20 +68,24 @@ const EstateDashboardCreate = () => {
     //VALIDATION SCHEMA
     const validationSchema = Yup.object({
         price: Yup.string()
-            .required('Ce champs est obligatoire')
+            .required('Ce champ est obligatoire')
             .min(2, 'Le prix ne peut être inférieur à 10'),
-        surface: Yup.string().required('Ce champs est obligatoire'),
-        floor: Yup.string().required('Ce champs est obligatoire'),
-        parking: Yup.string().required('Ce champs est obligatoire'),
-        rooms: Yup.string().required('Ce champs est obligatoire'),
-        idStatuses: Yup.string().required('Ce champs est obligatoire'),
-        idDistricts: Yup.string().required('Ce champs est obligatoire'),
-    })
+        surface: Yup.string().required('Ce champ est obligatoire'),
+        floor: Yup.string().required('Ce champ est obligatoire'),
+        parking: Yup.string()
+            .required('Ce champ est obligatoire'),
+        rooms: Yup.string().required('Ce champ est obligatoire'),
+        idStatuses: Yup.string().required('Ce champ est obligatoire'),
+        idDistricts: Yup.string().required('Ce champ est obligatoire'),
+        archived: Yup.string()
+            .required('Ce champ est obligatoire'),
+    });
+
 
     //INITIAL VALUES
     const initialValues = {
         price: 500,
-        location: '',
+        location: 'Appartement',
         surface: 50,
         showerRoom: 1,
         energising: 'C',
@@ -93,10 +94,11 @@ const EstateDashboardCreate = () => {
         heatingSystem: 'Pompe à chaleur',
         floor: 1,
         balcony: 0,
-        parking: 1,
+        parking: false,
         rooms: 3,
-        // idStatuses: 0,
-        // idDistricts: 0,
+        idStatuses: statuses[0]?.id,
+        idDistricts: districts[0]?.id,
+        archived: false,
         // images: [],
     }
     return (
@@ -220,12 +222,14 @@ const EstateDashboardCreate = () => {
                                             },
                                             {
                                                 name: 'parking',
-                                                value: values.parking,
+                                                value: values.parking ? 1 : 0,
                                                 type: 'number',
                                                 onChange: handleChange,
                                                 label: 'Place de parking',
                                                 error: errors.parking,
                                                 required: true,
+                                                inputType: 'select',
+                                                items: booleenNumber,
                                             },
                                             {
                                                 name: 'rooms',
@@ -257,6 +261,17 @@ const EstateDashboardCreate = () => {
                                                 required: true,
                                                 inputType: 'select',
                                                 items: districts,
+                                            },
+                                            {
+                                                name: 'archived',
+                                                value: values.archived ? 1 : 0,
+                                                type: 'number',
+                                                onChange: handleChange,
+                                                label: 'Archivée',
+                                                error: errors.archived,
+                                                required: true,
+                                                inputType: 'select',
+                                                items: booleenNumber,
                                             },
                                             // {
                                             //     name: 'idUsers',

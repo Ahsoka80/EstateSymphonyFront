@@ -275,7 +275,7 @@ export default function Accueil() {
                   {
                     (propertiesBySearch) ?
                       <>
-                        <Typography sx={{ marginTop: 5 }}>Résultat de la recherche : </Typography>
+                        <Typography sx={{ marginTop: 5, fontSize: 25 }} color={'green'}>Résultat de la recherche : </Typography>
                         <Col className='card'>
                           {propertiesBySearch.map((item, index) => {
                             return (
@@ -292,7 +292,7 @@ export default function Accueil() {
 
                       :
                       <>
-                        <Typography fullWidth>
+                        <Typography fullWidth color={'error'} bgcolor={'yellow'} sx={{ margin: 10, fontSize: 25 }}>
                           Aucune propriété correspond à votre recherche
                         </Typography>
                       </>

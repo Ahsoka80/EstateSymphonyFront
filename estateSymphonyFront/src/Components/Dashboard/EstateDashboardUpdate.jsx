@@ -22,6 +22,7 @@ const EstateDashboardUpdate = () => {
     const [districts, setDistricts] = useState([]);
     const [users, setUsers] = useState([]);
     const [updateEnabled, setUpdateEnabled] = useState(false);
+    const booleenNumber = [{ id: 0, name: 'Non' }, { id: 1, name: 'Oui' }];
 
     useEffect(() => {
         getAllDistricts()
@@ -30,7 +31,6 @@ const EstateDashboardUpdate = () => {
             });
         getProperty(id).then(data => {
             setItem(data);
-            console.log(data);
         });
         getUserByRole(4).then(data => {
             setUsers(data);
@@ -63,21 +63,26 @@ const EstateDashboardUpdate = () => {
     //Validation des champs du formulaire de modification d'un bien
     const validationSchema = Yup.object({
         price: Yup.string()
-            .required('Ce champs est obligatoire')
+            .required('Ce champ est obligatoire')
             .min(2, 'Le prix ne peut être inférieur à 10'),
-        surface: Yup.string().required('Ce champs est obligatoire'),
-        floor: Yup.string().required('Ce champs est obligatoire'),
-        parking: Yup.string().required('Ce champs est obligatoire'),
-        rooms: Yup.string().required('Ce champs est obligatoire'),
-        idStatuses: Yup.string().required('Ce champs est obligatoire'),
-        idDistricts: Yup.string().required('Ce champs est obligatoire'),
-    })
+        surface: Yup.string().required('Ce champ est obligatoire'),
+        floor: Yup.string().required('Ce champ est obligatoire'),
+        parking: Yup.string()
+            .required('Ce champ est obligatoire'),
+        rooms: Yup.string().required('Ce champ est obligatoire'),
+        idStatuses: Yup.string().required('Ce champ est obligatoire'),
+        idDistricts: Yup.string().required('Ce champ est obligatoire'),
+        archived: Yup.string()
+            .required('Ce champ est obligatoire'),
+    });
+
 
     //NAVIGATION
     const handleBack = () => {
         navigate('/dashboard/estates');
     }
     const handleUpdate = async (values) => {
+        console.log(values.parking);
         setUpdateSuccess('En cours de modification..');
         setUpdateErrors('');
         // let formData = new FormData();
@@ -107,6 +112,7 @@ const EstateDashboardUpdate = () => {
         rooms: item.rooms,
         idStatuses: item.idStatuses,
         idDistricts: item.idDistricts,
+        archived: item.archived,
         // idUsers: item.idUsers,
     }
     return (
@@ -230,12 +236,14 @@ const EstateDashboardUpdate = () => {
                                             },
                                             {
                                                 name: 'parking',
-                                                value: values.parking,
+                                                value: values.parking ? 1 : 0,
                                                 type: 'number',
                                                 onChange: handleChange,
                                                 label: 'Place de parking',
                                                 error: errors.parking,
                                                 required: true,
+                                                inputType: 'select',
+                                                items: booleenNumber,
                                             },
                                             {
                                                 name: 'rooms',
@@ -267,6 +275,17 @@ const EstateDashboardUpdate = () => {
                                                 required: true,
                                                 inputType: 'select',
                                                 items: districts,
+                                            },
+                                            {
+                                                name: 'archived',
+                                                value: values.archived ? 1 : 0,
+                                                type: 'number',
+                                                onChange: handleChange,
+                                                label: 'Archivée',
+                                                error: errors.archived,
+                                                required: true,
+                                                inputType: 'select',
+                                                items: booleenNumber,
                                             },
                                             // {
                                             //     name: 'idUsers',

@@ -18,7 +18,24 @@ export const getPropertiesBySearch = async (data) => {
         console.error('Erreur récupération des propriétés de la recherche : ', error);
     }
 }
-
+export const getPropertiesByStatus = async (id) => {
+    try {
+        const response = await instance.get(`/propertiesByStatus/${id}`);
+        console.log(response);
+        return response.data.data;
+    } catch (error) {
+        console.error('Erreur récupération des propriétés en fonction de leur status : ', error);
+    }
+}
+export const getPropertiesArchived = async () => {
+    try {
+        const response = await instance.get(`/properties/archived`);
+        console.log(response);
+        return response.data.data;
+    } catch (error) {
+        console.error('Erreur récupération des propriétés en fonction de leur status : ', error);
+    }
+}
 export const getProperty = async (id) => {
     try {
         const response = await instance.get(`property/${id}`);

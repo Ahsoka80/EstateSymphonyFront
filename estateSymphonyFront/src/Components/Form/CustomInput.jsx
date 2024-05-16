@@ -14,7 +14,7 @@ const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label,
                     >
                         <InputLabel id={`select-${name}`}>{label}</InputLabel>
                         <Select
-                            value={value}
+                            value={value ?? 0}
                             labelId={`select-${name}`}
                             name={name}
                             onClick={onClick}
@@ -22,7 +22,6 @@ const CustomInput = ({ name, value, type, onChange, onClick, placeholder, label,
                             placeholder={placeholder}
                             label={label}
                             required={required}
-
                         >
                             {items.map((item, _index) => {
                                 return (
