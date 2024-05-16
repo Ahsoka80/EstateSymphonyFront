@@ -49,7 +49,7 @@ const Header = (props) => {
         navigate('/profil');
     }
     const handleDashboard = () => {
-        navigate('/dashboard/estates') //A MODIFIER, estates c'est pour simplifier la mise en place de la partie de gestion des biens
+        navigate('/dashboard')
     }
 
     const {

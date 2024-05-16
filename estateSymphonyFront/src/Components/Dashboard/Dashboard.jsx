@@ -1,38 +1,28 @@
-import React from 'react'
-import './Dashboard.css'
+import { Outlet, useNavigate } from 'react-router-dom';
+import './Dashboard.css';
+import CustomButton from '../Buttons/CustomButton';
+
 function Dashboard() {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => { navigate(path); };
+
   return (
-    <>
-        <div>Bonjour Dashboard</div>
-
-        <div className='dashboard'>
-            <div class="menu">
-                <ul>
-                    <h3>Menu</h3>
-                    <a href="/Dashboard">Accueil</a>
-                    <a href="/Agendas">Agendas</a>
-                    <a href="/Contact">Contact Client</a>
-                    <a href="#">Gestion des biens</a> 
-                </ul>
-            </div>
-            <div className='globalBox'>
-              <div className='box'>
-                
-              </div>
-              <div className='box'>
-                
-              </div>
-              <div className='box'>
-
-              </div>
-              <div className='box'>
-                
-              </div>
-            </div>
-        </div>
-        
-    </>
-  )
+    <div className="dashboard-container">
+      <div className="menu">
+        <h3>Menu</h3>
+        <ul>
+          <li><CustomButton text={'Accueil'} onClick={() => handleNavigation('/dashboard/home')}></CustomButton></li>
+          <li><CustomButton text={'Agendas'} isEnabled={true} onClick={() => handleNavigation('/dashboard/agendas')}></CustomButton></li>
+          <li><CustomButton text={'Contact'} isEnabled={true} onClick={() => handleNavigation('/dashboard/contact')}></CustomButton></li>
+          <li><CustomButton text={'Biens'} onClick={() => handleNavigation('/dashboard/estates')}></CustomButton></li>
+        </ul>
+      </div>
+      <div className="content">
+        <Outlet />
+      </div>
+    </div>
+  );
 }
 
-export default Dashboard
+export default Dashboard;
