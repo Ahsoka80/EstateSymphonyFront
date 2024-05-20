@@ -1,7 +1,7 @@
 import './Dashboard.css'
 import { Form, useNavigate } from "react-router-dom";
 import { getAllDistricts } from "../../utils/api/districts";
-import { getUserByRole } from "../../utils/api/user";
+import { getUsersByRole } from "../../utils/api/user";
 import { getAllStatuses } from "../../utils/api/statuses";
 import { useEffect, useState } from "react";
 import { postProperty } from "../../utils/api/properties";
@@ -26,7 +26,7 @@ const EstateDashboardCreate = () => {
     //USE EFFECT
     useEffect(() => {
         getAllDistricts().then(data => { setDistricts(data); });
-        getUserByRole(4).then(data => {
+        getUsersByRole(4).then(data => {
             setUsers(data);
         });
         getAllStatuses().then(data => { setStatuses(data) })

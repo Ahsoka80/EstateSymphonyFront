@@ -5,8 +5,8 @@ import Home from "@mui/icons-material/Home";
 import { AuthContext } from "../../AuthContext/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { useEmail } from "../../utils/api/useEmail";
-import { getUserByRole, getUserEmail } from "../../utils/api/user";
-import { FieldArray, Formik } from "formik";
+import { getUsersByRole, getUserEmail } from "../../utils/api/user";
+import { Formik } from "formik";
 import CustomForm from "../Form/CustomForm";
 import { getAllDistricts } from "../../utils/api/districts";
 import { getAllStatuses } from "../../utils/api/statuses";
@@ -31,7 +31,7 @@ const CreateRealEstate = () => {
             getUserEmail(email).then(data => {
                 if (data.idRoles > 3) { console.log('Utilisateur pas autorisé à être ici..'); navigate('/'); }
             })
-            getUserByRole(4).then(data => {
+            getUsersByRole(4).then(data => {
                 setUsers(data);
             });
         } else {

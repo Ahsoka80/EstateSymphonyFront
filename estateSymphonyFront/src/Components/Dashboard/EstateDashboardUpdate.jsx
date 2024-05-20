@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, useNavigate, useParams } from "react-router-dom"
 import { getProperty, putProperty } from "../../utils/api/properties";
 import * as Yup from 'yup';
-import { getUserByRole } from "../../utils/api/user";
+import { getUsersByRole } from "../../utils/api/user";
 import { Box, FormHelperText, IconButton } from "@mui/material";
 import { Formik } from "formik";
 import CustomForm from "../Form/CustomForm";
@@ -32,7 +32,7 @@ const EstateDashboardUpdate = () => {
         getProperty(id).then(data => {
             setItem(data);
         });
-        getUserByRole(4).then(data => {
+        getUsersByRole(4).then(data => {
             setUsers(data);
         });
         getAllStatuses().then(data => { setStatuses(data) })
