@@ -1,5 +1,6 @@
 import instance from "../instanceAxios";
 
+//GET ALL
 export const getAllProperties = async () => {
     try {
         const response = await instance.get(`properties`);
@@ -8,7 +9,7 @@ export const getAllProperties = async () => {
         console.error('Erreur récupération de toutes les propriétés : ', error.message);
     }
 }
-
+//GET BY SEARCH
 export const getPropertiesBySearch = async (data) => {
     try {
         console.log(data);
@@ -18,6 +19,7 @@ export const getPropertiesBySearch = async (data) => {
         console.error('Erreur récupération des propriétés de la recherche : ', error);
     }
 }
+//GET BY STATUS
 export const getPropertiesByStatus = async (id) => {
     try {
         const response = await instance.get(`/propertiesByStatus/${id}`);
@@ -27,6 +29,7 @@ export const getPropertiesByStatus = async (id) => {
         console.error('Erreur récupération des propriétés en fonction de leur status : ', error);
     }
 }
+//GET ARCHIVED
 export const getPropertiesArchived = async () => {
     try {
         const response = await instance.get(`/properties/archived`);
@@ -36,6 +39,7 @@ export const getPropertiesArchived = async () => {
         console.error('Erreur récupération des propriétés en fonction de leur status : ', error);
     }
 }
+//GET ONE
 export const getProperty = async (id) => {
     try {
         const response = await instance.get(`property/${id}`);
@@ -44,7 +48,7 @@ export const getProperty = async (id) => {
         console.error('Erreur récupération de la propriété recherchée : ', error);
     }
 }
-
+//CREATE
 export const postProperty = async (data) => {
     try {
         // //Reconstruction des données du formulaire en format FormData
@@ -68,7 +72,7 @@ export const postProperty = async (data) => {
         console.error('Erreur création de la propriété : ', error);
     }
 }
-
+//UPDATE
 export const putProperty = async (data, id) => {
     try {
         const formData = new FormData();
@@ -90,7 +94,7 @@ export const putProperty = async (data, id) => {
 
     }
 }
-
+//TO ARCHIVE
 export const archiveProperty = async (id) => {
     try {
         const response = await instance.put(`property/archive/${id}`);
@@ -99,6 +103,7 @@ export const archiveProperty = async (id) => {
         console.error('Erreur archivage de la propriété : ', error);
     }
 }
+//TO RESTORE
 export const restoreProperty = async (id) => {
     try {
         const response = await instance.put(`property/restore/${id}`);
