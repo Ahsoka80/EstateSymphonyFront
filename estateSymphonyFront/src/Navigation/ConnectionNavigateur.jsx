@@ -18,6 +18,7 @@ import EstateDashboardCreate from "../Components/Dashboard/EstateDashboardCreate
 import Dashboard from "../Components/Dashboard/Dashboard";
 import Employees from "../Components/Dashboard/Employees/EmployeesList";
 import EmployeeCreate from "../Components/Dashboard/Employees/EmployeeCreate";
+import UserCreate from "../Components/Dashboard/Users/UserCreate";
 
 export const ConnectionNavigateur = () => {
   const router = createBrowserRouter([
@@ -47,10 +48,11 @@ export const ConnectionNavigateur = () => {
             { path: 'estates', element: <EstatesManager /> },
             { path: 'estate/:id', element: <EstateDashboardUpdate /> },
             { path: 'estate/create', element: <EstateDashboardCreate /> },
+            { path: 'employeesList', element: <Employees /> },
+            { path: 'employee/create', element: <EmployeeCreate /> },
+            { path: 'user/create', element: <UserCreate /> },
           ],
         },
-        { path: 'dashboard/employeesList', element: <Employees /> },
-        { path: '/dashboard/employee/create', element: <EmployeeCreate /> },
       ],
     }
   ]);

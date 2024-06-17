@@ -9,19 +9,22 @@ import * as Yup from 'yup';
 import CustomForm from "../../Form/CustomForm";
 import CustomButton from "../../Buttons/CustomButton";
 import { getRoles } from "../../../utils/api/roles";
+import { getAllDistricts } from "../../../utils/api/districts";
 
 
 
 const EmployeeCreate = () => {
-    const navigate = useNavigate();
+    const navigation = useNavigate();
     const [creationErrors, setCreationErrors] = useState('');
     const [creationSuccess, setCreationSuccess] = useState('');
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
+    const [districts, setDistricts] = useState([]);
 
     useEffect(() => {
         getUsersByRole(4).then(data => { setUsers(data); });
-        getRoles().then(data => { data[2].name = 'Employé'; data[3].name = 'Utilisateur'; setRoles(data); });
+        getRoles().then(data => { data[2].name = 'Employé'; data.splice(-1); setRoles(data); });
+        getAllDistricts().then(data => { setDistricts(data); });
     }, [])
 
     //Modification des données utilisateurs et des status pour affichage dans les select
@@ -30,17 +33,20 @@ const EmployeeCreate = () => {
     })
     //NAVIGATION
     const handleBack = () => {
-        navigate('/dashboard/employeesList');
+        navigation('/dashboard/employeesList');
     }
     //CREATE
     const handleCreate = async (data) => {
         setCreationSuccess('En cours de création..');
         setCreationErrors('');
         let response = await postEmployee(data);
-        let Successful = response.message.split(' ')[1] === 'créé';
         console.log(response);
+        let Successful = response.message.split(' ')[1] === 'créé';
         Successful ? setCreationSuccess(response.message) : setCreationErrors(response.message);
         Successful ? handleBack() : '';
+    }
+    const handleAddNewUser = () => {
+        navigation('/dashboard/user/create');
     }
     const validationSchema = Yup.object({
         descriptions: Yup.string().notRequired(),
@@ -113,27 +119,19 @@ const EmployeeCreate = () => {
                                                 inputType: 'select',
                                                 items: roles,
                                             },
+                                            {
+                                                name: 'idDistricts',
+                                                value: values.idDistricts,
+                                                type: 'number',
+                                                onChange: handleChange,
+                                                label: 'Quartier',
+                                                error: errors.idDistricts,
+                                                required: true,
+                                                inputType: 'select',
+                                                items: districts,
+                                            },
                                         ]}
                                     />
-
-
-                                    {/* /// PROBLEME DE MULTER INSERTION DES PHOTOS : En attente de solution côté API */}
-
-                                    {/* <FieldArray
-                                name="images"
-                                render={({ push, remove }) => (
-                                    <>
-                                        <input
-                                            type="file"
-                                            id="images"
-                                            accept="image/*"
-                                            onChange={(event) => {
-                                                push(...event.currentTarget.files);
-                                            }}
-                                        />
-
-                                    </>)} /> */}
-
 
                                     <>
                                         <CustomButton
@@ -147,6 +145,13 @@ const EmployeeCreate = () => {
                                         >
                                         </CustomButton>
                                     </>
+                                    <div className="AddUser">
+                                        <CustomButton
+                                            onClick={() => { handleAddNewUser() }}
+                                            text={'Ajouter un utilisateur'}
+                                            color={'info'} />
+                                    </div>
+
                                     <FormHelperText sx={{ color: 'green', marginLeft: 1, justifyContent: "center" }}>{creationSuccess}</FormHelperText>
                                     <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{creationErrors}</FormHelperText>
                                 </Form>

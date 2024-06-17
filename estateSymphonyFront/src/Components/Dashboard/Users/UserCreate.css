@@ -1,0 +1,13 @@
+.arrowBack {
+    display: flex;
+    justify-content: start;
+    margin-left: 100px;
+    padding-top: 20px;
+
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}

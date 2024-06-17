@@ -21,7 +21,6 @@ export default function Employees() {
                 lastname: employee.userEmployees.lastname,
                 email: employee.userEmployees.email,
                 phone: employee.userEmployees.phone,
-                fullname: `${employee.userEmployees.firstname || ''} ${employee.userEmployees.lastname || ''}`,
                 idRoles: employee.userEmployees.idRoles,
             }));
             setEmployees(employeesComplete);
@@ -53,6 +52,16 @@ export default function Employees() {
         let Successful = response.message.split(' ')[1] === 'supprimé';
         Successful ? setEmployees(employees.filter(employee => employee.id !== id)) : '';
     }
+
+    const handleDistricts = async (row, newDistrictId) => {
+        try {
+            console.log(row, newDistrictId);
+            const updateDistrict = await udapteEmployeeDistrict(row, row.id);
+            setEmployees(employees.map(emp => (emp.id === row.id) ? { ...emp, idDistricts: newDistrictId } : emp))
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du quartier', error);
+        }
+    }
     const handleRole = async (row, newRoleId) => {
         try {
             console.log(row, newRoleId);
@@ -71,14 +80,7 @@ export default function Employees() {
         { field: 'name', headerName: 'Surnom', width: 130, editable: true, },
         { field: 'descriptions', headerName: 'Description', width: 130, editable: true, },
         { field: 'email', headerName: 'Email', width: 220, editable: true },
-        { field: 'phone', headerName: 'Téléphone', width: 120, editable: true },
-        {
-            field: 'fullname',
-            headerName: 'Prénom Nom',
-            description: 'A choisir entre les colonnes firstname et lastname ou celle ci',
-            sortable: false,
-            width: 160,
-        },
+        { field: 'phone', headerName: 'Tél', width: 100, editable: true },
         {
             field: 'roles',
             headerName: 'Role',
@@ -125,10 +127,18 @@ export default function Employees() {
                     experimentalFeatures={{ newEditingApi: true }}
                 />
             </div>
-            <CustomButton
-                onClick={() => { handleAddNewEmployee() }}
-                text={'Ajouter un nouvel employé'}
-                color={'info'} />
+            <div className="AddEmployee">
+                <CustomButton
+                    onClick={() => { handleAddNewEmployee() }}
+                    text={'Ajouter un employé'}
+                    color={'info'} />
+            </div>
+            {/* <div className="AddUser">
+                <CustomButton
+                    onClick={() => { handleAddNewUser() }}
+                    text={'Ajouter un utilisateur'}
+                    color={'info'} />
+            </div> */}
         </div>
     );
 }
