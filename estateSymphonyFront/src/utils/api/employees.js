@@ -12,8 +12,9 @@ export const getEmployees = async () => {
 //UPDATE EMPLOYEE
 export const updateEmployee = async (data, id) => {
     try {
+        console.log(data);
         const response = await instance.put(`/employee/modify/${id}`, data);
-        return response.data.data;
+        return response.data;
     } catch (error) {
         console.error('Erreur de modification d\'un employé : ', error.message);
     }
