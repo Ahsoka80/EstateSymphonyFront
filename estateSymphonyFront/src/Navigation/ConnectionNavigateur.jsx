@@ -19,6 +19,8 @@ import Dashboard from "../Components/Dashboard/Dashboard";
 import Employees from "../Components/Dashboard/Employees/EmployeesList";
 import EmployeeCreate from "../Components/Dashboard/Employees/EmployeeCreate";
 import UserCreate from "../Components/Dashboard/Users/UserCreate";
+import Districts from "../Components/Dashboard/Districts/DistrictsList";
+import DistrictCreate from "../Components/Dashboard/Districts/DistrictCreate";
 
 export const ConnectionNavigateur = () => {
   const router = createBrowserRouter([
@@ -51,6 +53,8 @@ export const ConnectionNavigateur = () => {
             { path: 'employeesList', element: <Employees /> },
             { path: 'employee/create', element: <EmployeeCreate /> },
             { path: 'user/create', element: <UserCreate /> },
+            { path: 'districts', element: <Districts /> },
+            { path: 'district/create', element: <DistrictCreate /> },
           ],
         },
       ],
