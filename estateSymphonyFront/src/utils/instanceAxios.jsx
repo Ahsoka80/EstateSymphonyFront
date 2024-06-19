@@ -11,9 +11,6 @@ instance.interceptors.request.use((config) => {
     if (token) {
         config.headers["Authorization"] = "Bearer " + token;
     }
-    if (config.url === 'property/create') {
-        config.headers['Content-Type'] = 'multipart/form-data';
-    }
     return config;
 }, (errors) => {
     return Promise.reject(errors);

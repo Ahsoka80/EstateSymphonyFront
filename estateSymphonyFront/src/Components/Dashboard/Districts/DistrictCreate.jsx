@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, useNavigate } from "react-router-dom"
-import { getUsersByRole } from "../../../utils/api/user";
-import { postEmployee } from "../../../utils/api/employees";
 import { Box, FormHelperText, IconButton } from "@mui/material";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import CustomForm from "../../Form/CustomForm";
 import CustomButton from "../../Buttons/CustomButton";
-import { getRoles } from "../../../utils/api/roles";
-import { getAllDistricts, postDistrict } from "../../../utils/api/districts";
+import { postDistrict } from "../../../utils/api/districts";
 
 
 

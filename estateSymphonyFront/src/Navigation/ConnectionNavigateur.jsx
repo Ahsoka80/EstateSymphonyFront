@@ -21,6 +21,7 @@ import EmployeeCreate from "../Components/Dashboard/Employees/EmployeeCreate";
 import UserCreate from "../Components/Dashboard/Users/UserCreate";
 import Districts from "../Components/Dashboard/Districts/DistrictsList";
 import DistrictCreate from "../Components/Dashboard/Districts/DistrictCreate";
+import ClientFolderUpload from "../Components/Dashboard/ClientFolder";
 
 export const ConnectionNavigateur = () => {
   const router = createBrowserRouter([
@@ -50,6 +51,7 @@ export const ConnectionNavigateur = () => {
             { path: 'estates', element: <EstatesManager /> },
             { path: 'estate/:id', element: <EstateDashboardUpdate /> },
             { path: 'estate/create', element: <EstateDashboardCreate /> },
+            { path: 'clientFolder/create', element: <ClientFolderUpload /> },
             { path: 'employeesList', element: <Employees /> },
             { path: 'employee/create', element: <EmployeeCreate /> },
             { path: 'user/create', element: <UserCreate /> },

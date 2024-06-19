@@ -51,25 +51,27 @@ export const getProperty = async (id) => {
 //CREATE
 export const postProperty = async (data) => {
     try {
-        // //Reconstruction des données du formulaire en format FormData
-        const formData = new FormData();
-        // //Ajout des données du formulaire à l'objet formData
-        Object.keys(data).forEach(
-            key => {
-                if (Array.isArray(data[key])) {
-                    data[key].forEach(file => {
-                        formData.append(key, file);
-                    });
-                } else {
-                    formData.append(key, data[key]);
-                }
+        const response = await instance.post(`property/create`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
             }
-        )
-        // console.log(formData.values().toArray()[14]);
-        const response = await instance.post(`property/create`, formData);
+        });
         return response.data;
     } catch (error) {
         console.error('Erreur création de la propriété : ', error);
+    }
+}
+export const testFileMulter = async (data) => {
+    try {
+        const response = await instance.post('/upload-test', data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors du téléchargement du fichier : ', error);
     }
 }
 //UPDATE

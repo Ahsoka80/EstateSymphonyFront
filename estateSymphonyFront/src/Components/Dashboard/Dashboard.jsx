@@ -18,6 +18,7 @@ function Dashboard() {
           <li><CustomButton text={'Contact'} isEnabled={true} onClick={() => handleNavigation('/dashboard/contact')}></CustomButton></li>
           <li><CustomButton text={'Biens'} onClick={() => handleNavigation('/dashboard/estates')}></CustomButton></li>
           <li><CustomButton text={'Quartiers'} onClick={() => handleNavigation('/dashboard/districts')}></CustomButton></li>
+          <li><CustomButton text={'Dossier client'} isEnabled={true} onClick={() => handleNavigation('/dashboard/clientFolder/create')}></CustomButton></li>
         </ul>
       </div>
       <div className="content">
