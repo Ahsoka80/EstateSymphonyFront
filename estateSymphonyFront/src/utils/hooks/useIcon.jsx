@@ -1,20 +1,20 @@
-import { AccountCircle } from "@mui/icons-material";
-import { AlternateEmail } from "@mui/icons-material";
-import { Favorite } from "@mui/icons-material";
-import { ChatIcon } from "@mui/icons-material";
-import { FileUpload } from "@mui/icons-material";
-import { Visibility } from "@mui/icons-material";
-import { VisibilityOff } from "@mui/icons-material";
-import { HomeIcon } from "@mui/icons-material";
-import { SearchIcon } from "@mui/icons-material";
-import { FavoriteBorderIcon } from "@mui/icons-material";
-import { FolderIcon } from "@mui/icons-material";
-import { FilterAltIcon } from "@mui/icons-material";
-import { MessageIcon } from "@mui/icons-material";
-import { ShareIcon } from "@mui/icons-material";
-import { MenuIcon } from "@mui/icons-material";
-import { WarningIcon } from "@mui/icons-material";
-import { ArrowBackIcon } from "@mui/icons-material";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import AlternateEmail from '@mui/icons-material/AlternateEmail';
+import Favorite from '@mui/icons-material/Favorite';
+import ChatIcon from '@mui/icons-material/Chat';
+import FileUpload from '@mui/icons-material/FileUpload';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FolderIcon from '@mui/icons-material/Folder';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import MessageIcon from '@mui/icons-material/Message';
+import ShareIcon from "@mui/icons-material/Share";
+import MenuIcon from '@mui/icons-material/Menu';
+import WarningIcon from "@mui/icons-material/Warning";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const useIcon = (icon, color, size) => {
     switch (icon) {
