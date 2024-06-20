@@ -77,19 +77,7 @@ export const testFileMulter = async (data) => {
 //UPDATE
 export const putProperty = async (data, id) => {
     try {
-        const formData = new FormData();
-        Object.keys(data).forEach(
-            key => {
-                if (Array.isArray(data[key])) {
-                    data[key].forEach(file => {
-                        formData.append(key, file);
-                    });
-                } else {
-                    formData.append(key, data[key]);
-                }
-            }
-        )
-        const response = await instance.put(`/property/modify/${id}`, formData);
+        const response = await instance.put(`/property/modify/${id}`, data);
         return response.data;
     } catch (error) {
         console.error('Erreur modification de la propriété : ', error);

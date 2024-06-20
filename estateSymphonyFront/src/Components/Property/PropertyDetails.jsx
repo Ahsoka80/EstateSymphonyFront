@@ -4,20 +4,21 @@ import { getProperty } from '../../utils/api/properties'
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
+import { getPhotosByProperty } from '../../utils/api/photos';
 
 
 const Details = () => {
     const { id } = useParams()
     const [item, setItem] = useState(null)
+    const [photos, setPhotos] = useState([]);
 
     useEffect(() => {
-        getProperty(id).then(data => {
-            setItem(data);
-        });
+        getProperty(id).then(data => { setItem(data); });
+        getPhotosByProperty(id).then(data => { console.log(data[0].photo); setPhotos(data) });
     }, [id])
     return (
         !item ?
-            <Typography>Coucou</Typography>
+            <Typography>Oups une erreur s'est produite..</Typography>
             :
             <>
                 <Card>
@@ -31,7 +32,7 @@ const Details = () => {
                         </Row>
                         <Row>
                             <CardMedia sx={{ height: 140 }}
-                                image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
+                                image={`C:\\Users\\micaf\\demo\\node-api${photos[0].photo}`}
                                 title="green iguana">
                             </CardMedia>
                         </Row>

@@ -85,16 +85,20 @@ const EstateDashboardUpdate = () => {
         console.log(values.parking);
         setUpdateSuccess('En cours de modification..');
         setUpdateErrors('');
-        // let formData = new FormData();
-        // values.map((item)=>{
-
-        // })
-        // Envoyer les données au serveur, y compris les noms des images
-        // console.log(values);
-        let message = await putProperty(values, id);
-        let Successful = message.message.split(' ')[1] === 'modifiée';
-        Successful ? setUpdateSuccess(message.message) : setUpdateErrors(message.message);
-        // Successful ? handleBack() : '';
+        const formData = new FormData();
+        for (const [key, value] of Object.entries(values)) {
+            if (key === 'photo') {
+                for (let j = 0; j < value.length; j++) {
+                    formData.append(key, value[j])
+                }
+            } else {
+                formData.append(key, values[key]);
+            }
+        }
+        const response = await putProperty(values, id);
+        let Successful = response.message.split(' ')[1] === 'modifiée';
+        Successful ? setUpdateSuccess(response.message) : setUpdateErrors(response.message);
+        Successful ? handleBack() : '';
     }
 
     const initialValues = {

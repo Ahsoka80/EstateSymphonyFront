@@ -50,13 +50,15 @@ const EstateDashboardCreate = () => {
         console.log(values);
 
         const formData = new FormData();
-        Object.keys(values).forEach(key => {
+        for (const [key, value] of Object.entries(values)) {
             if (key === 'photo') {
-                values[key].forEach(file => formData.append('photo', file));
+                for (let j = 0; j < value.length; j++) {
+                    formData.append(key, value[j])
+                }
             } else {
                 formData.append(key, values[key]);
             }
-        });
+        }
 
         try {
             const response = await postProperty(formData);
@@ -117,7 +119,7 @@ const EstateDashboardCreate = () => {
                 initialValues={initialValues}
                 onSubmit={handleCreate}
             >
-                {({ values, handleChange, handleSubmit, errors }) => (
+                {({ values, handleChange, handleSubmit, errors, setFieldValue }) => (
                     <Box sx={{ '& button': { marginTop: 2 } }}>
                         <h2>Création d'un bien immobilier</h2>
                         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -277,24 +279,18 @@ const EstateDashboardCreate = () => {
                             />
                             <FieldArray
                                 name="photo"
-                                render={({ push, remove }) => (
+                                render={() => (
                                     <>
                                         <input
+                                            multiple
                                             type="file"
                                             id="photo"
                                             accept="image/*"
-                                            onChange={(event) => {
-                                                Array.from(event.currentTarget.files).forEach(file => {
-                                                    push(file);
-                                                });
+                                            onChange={(e) => {
+                                                console.log(e.target.files);
+                                                setFieldValue('photo', e.target.files);
                                             }}
                                         />
-                                        {values.photo.map((file, index) => (
-                                            <div key={index}>
-                                                <span>image_{index + 1}_{file.name}</span>
-                                                <button type="button" onClick={() => remove(index)}>Remove</button>
-                                            </div>
-                                        ))}
                                     </>
                                 )}
                             />
