@@ -2,9 +2,10 @@
     background-color: rgb(101, 101, 126);
     height: 30vh;
     padding-top: 10px;
+    margin-top: 10vh;
 }
 
-.rowGlobal{
+.rowGlobal {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -12,15 +13,16 @@
     margin-left: 10%;
 }
 
-img{
+img {
     width: 25%;
 }
 
-.row2{
+.row2 {
     display: grid;
 }
-.rowRight{
+
+.rowRight {
     display: flex;
     justify-content: space-around;
-    
+
 }

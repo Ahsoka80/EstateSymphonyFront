@@ -10,7 +10,6 @@ function Dashboard() {
   return (
     <div className="dashboard-container">
       <div className="menu">
-        <h3>Menu</h3>
         <ul>
           <li><CustomButton text={'Accueil'} onClick={() => handleNavigation('/dashboard/home')}></CustomButton></li>
           <li><CustomButton text={'Employés'} onClick={() => handleNavigation('/dashboard/employeesList')}></CustomButton></li>

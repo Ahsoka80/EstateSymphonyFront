@@ -61,10 +61,10 @@ const Header = (props) => {
         <header className='header'>
             <Navbar>
                 <Container className='containerMenu'>
-                    <Navbar.Brand style={{ color: textColor }} onClick={handleHome}>
-                        <span>
+                    <Navbar.Brand style={{ color: textColor }} onClick={handleHome}                    >
+                        <Link style={{ textDecoration: 'none', padding: '0px 10px' }} sx={{ cursor: 'pointer' }}>
                             {title}
-                        </span>
+                        </Link>
                     </Navbar.Brand>
                     <Container>
                         <Link to='/accueil' style={{ textDecoration: 'none', color: 'white', padding: '0px 10px' }}>

@@ -57,17 +57,11 @@ const ProfilPage = () => {
     return (
         <div>
             <>
-                <CustomButton
-                    onClick={handleMyAccount}
-                    color="info"
-                    text={'Mon Compte'}
-                    style={{ color: 'white' }}
-
-                />
-                <CustomButton onClick={handleMyFavories} color="info" text={'Mes favoris'}></CustomButton>
-                <CustomButton onClick={handleMyAlerts} color="info" text={'Mes alertes'}></CustomButton>
-                <CustomButton onClick={handleMyEstimates} color="info" text={'Mes estimations'}></CustomButton>
-                {isEmployee ? <CustomButton onClick={handleCreateReal} color="info" text={'Créer un bien'}></CustomButton> : <></>}
+                <CustomButton onClick={handleMyAccount} color="info" text={'Mon Compte'} />
+                <CustomButton onClick={handleMyFavories} color="info" text={'Mes favoris'} />
+                <CustomButton onClick={handleMyAlerts} color="info" text={'Mes alertes'} />
+                <CustomButton onClick={handleMyEstimates} color="info" text={'Mes estimations'} />
+                {isEmployee ? <CustomButton onClick={handleCreateReal} color="info" text={'Créer un bien'} /> : <></>}
                 <IconButton
                     color="info"
                     onClick={handleHome}

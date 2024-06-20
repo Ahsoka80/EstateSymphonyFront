@@ -1,4 +1,4 @@
-import { Container, Stack } from '@mui/material';
+import { Container } from '@mui/material';
 import './Footer.css'
 export default function Footer() {
     return (
@@ -8,7 +8,7 @@ export default function Footer() {
 
                     <div>
                         <h3>L'Entreprise</h3>
-                        <span>Nous contacter</span> 
+                        <span>Nous contacter</span>
                     </div>
 
                     <hr />
@@ -25,14 +25,14 @@ export default function Footer() {
                     <hr />
 
                     <img src="../src/assets/img/Logo_white_on_black.jpg" alt="" />
-                    
+
                 </div>
                 <div className='rowRight'>
                     <span>EstateSymphony France SAS © 2024</span>
                     <span> Conditions Générales d'Utilisation</span>
                     <span>Politique Générales de Protection des Données</span>
                 </div>
-                
+
             </Container>
         </footer>
     );

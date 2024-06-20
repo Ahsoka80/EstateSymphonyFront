@@ -85,7 +85,7 @@ export default function Accueil() {
       <Container>
         <Row>
           <img className='imgAccueil' src="..\src\assets\img\hklkkjndono.jpg" alt="image d'un salon moderne avec des fauteuil blanc" />
-          <h1 className='accueil'>Bonjour Accueil</h1>
+          <h1 className='accueil'>Bonjour</h1>
           <Formik enableReinitialize
             validationSchema={validation}
             initialValues={{
@@ -114,11 +114,13 @@ export default function Accueil() {
                         {
                           name: 'price',
                           value: values.price,
-                          type: 'number',
+                          type: 'slider',
                           onChange: handleChange,
                           label: 'Prix',
                           error: errors.price,
                           required: false,
+                          min: 400,
+                          max: 100000,
                         },
                         //#endregion
                         //#region STATUS
@@ -264,7 +266,7 @@ export default function Accueil() {
                     <CustomButton
                       onClick={handleSubmit}
                       text={'Rechercher'}
-                      style={{ color: 'white' }}
+                      style={{ color: 'blue' }}
                       type={'submit'}
                       size={'large'}
                       fullWidth={false}
@@ -275,7 +277,7 @@ export default function Accueil() {
                   {
                     (propertiesBySearch) ?
                       <>
-                        <Typography sx={{ marginTop: 5, fontSize: 25 }} color={'green'}>Résultat de la recherche : </Typography>
+                        <Typography sx={{ marginTop: 5, fontSize: 25 }} color={'green'}>Résultat de la recherche </Typography>
                         <Col className='card'>
                           {propertiesBySearch.map((item, index) => {
                             return (
@@ -306,7 +308,9 @@ export default function Accueil() {
         <Row className='rowLastAnnoncement'>
 
           <Col className='mt-3'>
-            <span>Les dernières annonces :</span>
+            <Typography fullWidth color={'blue'} sx={{ marginTop: 7, fontSize: 25 }}>
+              Les dernières annonces
+            </Typography>
           </Col>
 
           <Col className='card'>
@@ -323,7 +327,9 @@ export default function Accueil() {
         </Row>
         <Row>
           <Col>
-            <span> Favoris :</span>
+            <Typography color={'orange'} sx={{ fontSize: 25 }}>
+              Favoris
+            </Typography>
           </Col>
           <Col>
             {
@@ -360,7 +366,7 @@ export default function Accueil() {
                 </Col>
                 :
                 <>
-                  <Typography variant=''>
+                  <Typography variant='body2' color={'orangered'} sx={{ marginBottom: 10 }}>
                     Veuillez vous connecter/inscrire pour avoir des favoris
                   </Typography>
                 </>
