@@ -20,6 +20,8 @@ const EstateDashboardCreate = () => {
     const [districts, setDistricts] = useState([]);
     const [users, setUsers] = useState([]);
     const booleenNumber = [{ id: 0, name: 'Non' }, { id: 1, name: 'Oui' }];
+    const energisingList = [{ id: 'A', name: 'A' }, { id: 'B', name: 'B' }, { id: 'C', name: 'C' }, { id: 'D', name: 'D' }, { id: 'E', name: 'E' }, { id: 'F', name: 'F' }, { id: 'G', name: 'G' },]
+
 
     useEffect(() => {
         getAllDistricts().then(data => setDistricts(data));
@@ -173,7 +175,8 @@ const EstateDashboardCreate = () => {
                                         label: 'Classe énergétique',
                                         error: errors.energising,
                                         required: false,
-                                        placeholder: 'A à G',
+                                        inputType: 'select',
+                                        items: energisingList,
                                     },
                                     {
                                         name: 'typeEnergic',

@@ -9,3 +9,12 @@ export const getPhotosByProperty = async (id) => {
         console.error('Erreur récupération de toutes les photos d\'une propriété : ', error.message);
     }
 }
+//DELETE
+export const deletePhoto = async (id) => {
+    try {
+        const response = await instance.delete(`/photo/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la suppression d\'une photo : ', error.message);
+    }
+}

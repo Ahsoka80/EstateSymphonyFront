@@ -34,7 +34,8 @@ const EstatesManager = () => {
     const handlePropertiesStatus = async (idStatuses) => {
         const response = await getPropertiesByStatus(idStatuses);
         console.log(response);
-        setPropertiesByStatus(response);
+        let dataReversed = response.reverse();
+        setPropertiesByStatus(dataReversed);
     }
     const handlePropertiesArchived = async () => {
         const response = await getPropertiesArchived();

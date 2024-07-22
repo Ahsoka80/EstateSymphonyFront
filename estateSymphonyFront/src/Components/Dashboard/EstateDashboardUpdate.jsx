@@ -3,13 +3,15 @@ import { Form, useNavigate, useParams } from "react-router-dom"
 import { getProperty, putProperty } from "../../utils/api/properties";
 import * as Yup from 'yup';
 import { getUsersByRole } from "../../utils/api/user";
-import { Box, FormHelperText, IconButton } from "@mui/material";
-import { Formik } from "formik";
+import { Box, FormHelperText, Grid, IconButton } from "@mui/material";
+import { FieldArray, Formik } from "formik";
 import CustomForm from "../Form/CustomForm";
 import { getAllStatuses } from "../../utils/api/statuses";
 import { getAllDistricts } from "../../utils/api/districts";
 import CustomButton from "../Buttons/CustomButton";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import { deletePhoto, getPhotosByProperty } from "../../utils/api/photos";
+import useIcon from "../../utils/hooks/useIcon";
 
 
 const EstateDashboardUpdate = () => {
@@ -18,35 +20,26 @@ const EstateDashboardUpdate = () => {
     const [item, setItem] = useState({ price: 0, location: '', surface: 0, showerRoom: 0, energising: '', typeEnergic: '', description: '', heatingSystem: '', floor: 0, balcony: 0, parking: 0, rooms: 0, idStatuses: 0, idDistricts: 0, idUsers: 0 });
     const [updateErrors, setUpdateErrors] = useState('');
     const [updateSuccess, setUpdateSuccess] = useState('');
+    const [updatePhotosSuccess, setUpdatePhotoSuccess] = useState('');
     const [statuses, setStatuses] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [users, setUsers] = useState([]);
-    const [updateEnabled, setUpdateEnabled] = useState(false);
+    const [photos, setPhotos] = useState([]);
     const booleenNumber = [{ id: 0, name: 'Non' }, { id: 1, name: 'Oui' }];
+    const URL_API = `http://127.0.0.1:3000`;
+    const closeIcon = useIcon('close', 'yellow', 10, 'rgba(0, 0, 0, 0.5)');
+    const energisingList = [{ id: 'A', name: 'A' }, { id: 'B', name: 'B' }, { id: 'C', name: 'C' }, { id: 'D', name: 'D' }, { id: 'E', name: 'E' }, { id: 'F', name: 'F' }, { id: 'G', name: 'G' },]
 
     useEffect(() => {
-        getAllDistricts()
-            .then(data => {
-                setDistricts(data);
-            });
-        getProperty(id).then(data => {
-            setItem(data);
-        });
-        getUsersByRole(4).then(data => {
-            setUsers(data);
-        });
-        getAllStatuses().then(data => { setStatuses(data) })
+        getProperty(id).then(data => { setItem(data); });
+        getPhotosByProperty(id).then(data => { setPhotos(data) });
     }, [id])
+    useEffect(() => {
+        getAllDistricts().then(data => { setDistricts(data); });
+        getUsersByRole(4).then(data => { setUsers(data); });
+        getAllStatuses().then(data => { setStatuses(data) });
+    }, [])
 
-
-    // useEffect(() => {
-    //     if (item != Formik.values) {
-    //         setUpdateEnabled(true);
-    //     } else {
-    //         setUpdateEnabled(false);
-    //     }
-    //     console.log(updateEnabled);
-    // }, [Formik.values])
 
     users.forEach(user => {
         user.name = `${user.firstname} ${user.lastname} (${user.email})`;
@@ -62,19 +55,27 @@ const EstateDashboardUpdate = () => {
 
     //Validation des champs du formulaire de modification d'un bien
     const validationSchema = Yup.object({
-        price: Yup.string()
-            .required('Ce champ est obligatoire')
-            .min(2, 'Le prix ne peut être inférieur à 10'),
+        price: Yup.string().required('Ce champ est obligatoire').min(2, 'Le prix ne peut être inférieur à 10'),
         surface: Yup.string().required('Ce champ est obligatoire'),
         floor: Yup.string().required('Ce champ est obligatoire'),
-        parking: Yup.string()
-            .required('Ce champ est obligatoire'),
+        parking: Yup.string().required('Ce champ est obligatoire'),
         rooms: Yup.string().required('Ce champ est obligatoire'),
         idStatuses: Yup.string().required('Ce champ est obligatoire'),
         idDistricts: Yup.string().required('Ce champ est obligatoire'),
-        archived: Yup.string()
-            .required('Ce champ est obligatoire'),
+        archived: Yup.string().required('Ce champ est obligatoire'),
     });
+
+    const photosFiltered = (arr1, arr2) => {
+        const isDifferent = (obj1, obj2) => {
+            return JSON.stringify(obj1) !== JSON.stringify(obj2);
+        };
+
+        const onlyInFirst = arr1.filter(obj1 => !arr2.some(obj2 => !isDifferent(obj1, obj2)));
+        const onlyInSecond = arr2.filter(obj2 => !arr1.some(obj1 => !isDifferent(obj2, obj1)));
+
+        return [...onlyInFirst, ...onlyInSecond];
+    };
+
 
 
     //NAVIGATION
@@ -82,23 +83,65 @@ const EstateDashboardUpdate = () => {
         navigate('/dashboard/estates');
     }
     const handleUpdate = async (values) => {
-        console.log(values.parking);
+        // console.log('new', values.photos);
+        // console.log('old', photos);
+        item.photos = photos;
+        console.log('item old', item);
+        console.log('item new', values);
         setUpdateSuccess('En cours de modification..');
+        setUpdatePhotoSuccess('');
         setUpdateErrors('');
-        const formData = new FormData();
-        for (const [key, value] of Object.entries(values)) {
-            if (key === 'photo') {
-                for (let j = 0; j < value.length; j++) {
-                    formData.append(key, value[j])
+        const photoResulted = photosFiltered(photos, values.photos);
+        let photosDeleted = 0;
+        try {
+            if (photoResulted.length > 0) {
+                for (let i = 0; i < photoResulted.length; i++) {
+                    const onePhoto = photoResulted[i];
+                    let response = await deletePhoto(onePhoto.id);
+                    (response.message.split(' ')[1] === 'supprimée') ? photosDeleted += 1 : console.log(`Photo ${onePhoto.id} pas supprimée`);
                 }
-            } else {
-                formData.append(key, values[key]);
+                photosDeleted > 0 ? setUpdatePhotoSuccess(`${photosDeleted} photo(s) supprimée(s)`) : setUpdateErrors('Aucune photo supprimée');
+                getPhotosByProperty(id).then(data => { setPhotos(data) });
             }
+        } catch (error) {
+            console.error('Erreur suppression  : ', error);
         }
-        const response = await putProperty(values, id);
-        let Successful = response.message.split(' ')[1] === 'modifiée';
-        Successful ? setUpdateSuccess(response.message) : setUpdateErrors(response.message);
-        Successful ? handleBack() : '';
+
+        if (
+            item.price !== values.price ||
+            item.location !== values.location ||
+            item.surface !== values.surface ||
+            item.showerRoom !== values.showerRoom ||
+            item.energising !== values.energising ||
+            item.typeEnergic !== values.typeEnergic ||
+            item.description !== values.description ||
+            item.heatingSystem !== values.heatingSystem ||
+            item.floor !== values.floor ||
+            item.balcony !== values.balcony ||
+            item.parking != values.parking ||
+            item.rooms !== values.rooms ||
+            item.idStatuses !== values.idStatuses ||
+            item.idDistricts !== values.idDistricts ||
+            item.archived != values.archived ||
+            values.photo.length > 0
+        ) {
+            setUpdateSuccess('Pas pareil');
+            const formData = new FormData();
+            for (const [key, value] of Object.entries(values)) {
+                if (key === 'photo') {
+                    for (let j = 0; j < value.length; j++) {
+                        formData.append(key, value[j])
+                    }
+                } else {
+                    formData.append(key, values[key]);
+                }
+            }
+            const response = await putProperty(values, id);
+            let Successful = response.message.split(' ')[1] === 'modifiée';
+            Successful ? setUpdateSuccess(response.message) : setUpdateErrors(response.message);
+
+        } else { setUpdateSuccess('Pas de modifications des données du bien'); }
+        // Successful ? handleBack() : '';
     }
 
     const initialValues = {
@@ -117,7 +160,7 @@ const EstateDashboardUpdate = () => {
         idStatuses: item.idStatuses,
         idDistricts: item.idDistricts,
         archived: item.archived,
-        // idUsers: item.idUsers,
+        photos: photos,
     }
     return (
         <>
@@ -134,7 +177,7 @@ const EstateDashboardUpdate = () => {
                     initialValues={initialValues}
                     onSubmit={handleUpdate}
                 >
-                    {({ values, handleChange, handleSubmit, errors }) => {
+                    {({ values, handleChange, handleSubmit, errors, setFieldValue }) => {
                         return (
                             <Box sx={{ '& button': { marginTop: 2 } }}>
                                 <h2>Modification d&apos;un bien immobilier</h2>
@@ -189,7 +232,8 @@ const EstateDashboardUpdate = () => {
                                                 label: 'Classe énergétique',
                                                 error: errors.energising,
                                                 required: false,
-                                                placeholder: 'A à G',
+                                                inputType: 'select',
+                                                items: energisingList,
                                             },
                                             {
                                                 name: 'typeEnergic',
@@ -304,42 +348,71 @@ const EstateDashboardUpdate = () => {
                                             // },
                                         ]}
                                     />
+                                    <FieldArray
+                                        name="photo"
+                                        render={() => (
+                                            <>
+                                                <input
+                                                    multiple
+                                                    type="file"
+                                                    id="photo"
+                                                    accept="image/*"
+                                                    onChange={(e) => {
+                                                        console.log(e.target.files);
+                                                        setFieldValue('photo', e.target.files);
+                                                    }}
+                                                />
+                                            </>
+                                        )}
+                                    />
 
-
-                                    {/* /// PROBLEME DE MULTER INSERTION DES PHOTOS : En attente de solution côté API */}
-
-                                    {/* <FieldArray
-                                name="images"
-                                render={({ push, remove }) => (
-                                    <>
-                                        <input
-                                            type="file"
-                                            id="images"
-                                            accept="image/*"
-                                            onChange={(event) => {
-                                                push(...event.currentTarget.files);
-                                            }}
-                                        />
-
-                                    </>)} /> */}
-
-
+                                    <FieldArray
+                                        name="photos"
+                                        render={({ remove }) => (
+                                            <Grid container spacing={2} justifyContent="center" style={{ marginTop: '20px' }}>
+                                                {values.photos.map((photo, index) => (
+                                                    <Grid item xs={6} sm={3} key={index}>
+                                                        <div style={{ position: 'relative' }}>
+                                                            <img
+                                                                src={photo.photo.startsWith('/public') ? URL_API + photo.photo.substring(7) : URL_API + photo.photo}
+                                                                alt={`Photo ${index}`}
+                                                                style={{ width: '100%' }}
+                                                            />
+                                                            <IconButton
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '0',
+                                                                    right: '0',
+                                                                    color: 'red',
+                                                                }}
+                                                                onClick={() => remove(index)}
+                                                            >
+                                                                {closeIcon}
+                                                            </IconButton>
+                                                        </div>
+                                                    </Grid>
+                                                ))}
+                                            </Grid>
+                                        )}
+                                    />
                                     <>
                                         <CustomButton
                                             onClick={handleSubmit}
                                             text={'Modifier'}
-                                            style={{ color: 'white' }}
+                                            style={{ color: 'green' }}
                                             type={'submit'}
                                             size={'large'}
                                             fullwidth={false}
                                             variant={'contained'}
-                                            isEnabled={updateEnabled}
+                                            isEnabled={false} //reversed
                                         >
                                         </CustomButton>
                                     </>
                                     <FormHelperText sx={{ color: 'green', marginLeft: 1, justifyContent: "center" }}>{updateSuccess}</FormHelperText>
+                                    <FormHelperText sx={{ color: 'green', marginLeft: 1, justifyContent: "center" }}>{updatePhotosSuccess}</FormHelperText>
                                     <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{updateErrors}</FormHelperText>
                                 </Form>
+
                             </Box>
 
                         )
