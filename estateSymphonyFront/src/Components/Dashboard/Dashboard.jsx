@@ -11,7 +11,7 @@ function Dashboard() {
     <div className="dashboard-container">
       <div className="menu">
         <ul>
-          <li><CustomButton text={'Accueil'} onClick={() => handleNavigation('/dashboard/home')}></CustomButton></li>
+          {/* <li><CustomButton text={'Accueil'} onClick={() => handleNavigation('/dashboard/home')}></CustomButton></li> */}
           <li><CustomButton text={'Employés'} onClick={() => handleNavigation('/dashboard/employeesList')}></CustomButton></li>
           <li><CustomButton text={'Agendas'} isEnabled={true} onClick={() => handleNavigation('/dashboard/agendas')}></CustomButton></li>
           <li><CustomButton text={'Contact'} isEnabled={true} onClick={() => handleNavigation('/dashboard/contact')}></CustomButton></li>

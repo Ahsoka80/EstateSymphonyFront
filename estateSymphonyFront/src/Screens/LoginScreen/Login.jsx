@@ -132,7 +132,7 @@ const LoginForm = () => {
                                     onClick={handleSubmit}
                                     // type={'contained'}
                                     text={'Connexion'}
-                                    style={{ color: 'white' }}
+                                    style={{ color: 'blue' }}
                                     iconPosition={'right'}
                                     type={'submit'}
                                     color={'success'}
@@ -150,7 +150,7 @@ const LoginForm = () => {
                                 >
                                     Pas encore inscrit ?
                                 </Button>
-                                
+
                                 <ToastContainer />
                             </Form>
                         </div>

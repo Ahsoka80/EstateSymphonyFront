@@ -46,17 +46,15 @@ export default function Accueil() {
       .then(data => { setDistricts(data); });
     getAllStatuses().then(data => { setStatuses(data) })
     if (isLoggedIn) {
-      getUserEmail(email).then(data => {
-        setIdUser(data.id);
-      })
+      getUserEmail(email).then(data => { data ? setIdUser(data?.id) : ''; })
       if (idUser !== '') {
-        getAllFavorisByOne(idUser).then(data => { setFavoris(data.slice(-3)); })
+        getAllFavorisByOne(idUser).then(data => { setFavoris(data?.slice(-3)); })
       }
       getAllFavorisByOne(idUser).then(data => { setFavoris(data); })
     }
   }, [email, idUser, isLoggedIn]);
 
-  statuses.forEach(status => {
+  statuses?.forEach(status => {
     if (status.hidden) {
       status.name = status.sold ? 'Vendu' : 'Loué';
     }
@@ -79,7 +77,9 @@ export default function Accueil() {
 
   let { properties } = useContext(PropertiesContext);
   console.log(properties);
-  properties = properties.slice(-4);
+  properties = properties?.slice(-4);
+  let propertiesReversed = properties?.reverse();
+  console.log(propertiesReversed);
   return (
     <>
       <Container>
@@ -314,7 +314,7 @@ export default function Accueil() {
           </Col>
 
           <Col className='card'>
-            {properties.map((item, index) => {
+            {propertiesReversed.map((item, index) => {
               return (
                 <CustomCard
                   {...item}
@@ -327,50 +327,56 @@ export default function Accueil() {
         </Row>
         <Row>
           <Col>
-            <Typography color={'orange'} sx={{ fontSize: 25 }}>
+            <Typography color={'darkblue'} sx={{ fontSize: 25 }}>
               Favoris
             </Typography>
           </Col>
           <Col>
-            {
-              (favoris && favoris.length !== 0) ?
-                <Col className='card'>
-                  {favoris.map((item) => {
-                    return (
-                      <Card key={item.id} sx={{ width: 245, height: 350 }}>
-                        <Link to={`/details/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                          <CardMedia
-                            sx={{ height: 140 }}
-                            image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
-                            title="green iguana"
-                          />
-                          <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                              {item.location}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              Type : {item.houseType} <br></br>
-                              Surface : {item.surface} <br></br>
-                              Nombres de pièces : {item.room} <br></br>
-                            </Typography>
-                          </CardContent>
-                        </Link>
-                        <CardActions>
-                          <Button size="small">Share</Button>
-                          <Button size="small">Learn More</Button>
-                        </CardActions>
-                      </Card>
+            {(!isLoggedIn) ?
+              <>
+                <Typography variant='body2' color={'orangered'} sx={{ marginBottom: 10 }}>
+                  Veuillez vous connecter/inscrire pour avoir des favoris
+                </Typography>
+              </>
+              : (
+                (favoris && favoris.length > 0) ?
+                  <Col className='card'>
+                    {favoris.map((item) => {
+                      return (
+                        <Card key={item.id} sx={{ width: 245, height: 350 }}>
+                          <Link to={`/details/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <CardMedia
+                              sx={{ height: 140 }}
+                              image="../src/assets/img/maisons-modernes-modeles-plans-amenagement.jpg"
+                              title="green iguana"
+                            />
+                            <CardContent>
+                              <Typography gutterBottom variant="h5" component="div">
+                                {item.location}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                Type : {item.houseType} <br></br>
+                                Surface : {item.surface} <br></br>
+                                Nombres de pièces : {item.room} <br></br>
+                              </Typography>
+                            </CardContent>
+                          </Link>
+                          <CardActions>
+                            <Button size="small">Share</Button>
+                            <Button size="small">Learn More</Button>
+                          </CardActions>
+                        </Card>
 
-                    )
-                  })}
-                </Col>
-                :
-                <>
-                  <Typography variant='body2' color={'orangered'} sx={{ marginBottom: 10 }}>
-                    Veuillez vous connecter/inscrire pour avoir des favoris
-                  </Typography>
-                </>
-            }
+                      )
+                    })}
+                  </Col>
+                  :
+                  <>
+                    <Typography variant='body2' color={'darkblue'} sx={{ marginBottom: 10 }}>
+                      Aucun favoris pour l'instant
+                    </Typography>
+                  </>
+              )}
           </Col>
         </Row>
       </Container>

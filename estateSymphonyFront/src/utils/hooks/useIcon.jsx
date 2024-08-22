@@ -15,9 +15,15 @@ import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from '@mui/icons-material/Menu';
 import WarningIcon from "@mui/icons-material/Warning";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
-const useIcon = (icon, color, size) => {
+const useIcon = (icon, color, size, bgcolor) => {
     switch (icon) {
+        case 'close':
+            return <CloseIcon size={size} sx={{ color: color, bgcolor: bgcolor }} />
+        case 'delete':
+            return <DeleteIcon color={color} size={size} />
         case 'account-circle':
             return <AccountCircle color={color} size={size} />
         case 'home':

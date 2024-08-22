@@ -182,13 +182,6 @@ export default function Employees() {
             </div>
             <FormHelperText sx={{ color: 'green', marginLeft: 1, justifyContent: "center" }}>{creationSuccess}</FormHelperText>
             <FormHelperText sx={{ color: 'red', marginLeft: 1, justifyContent: "center" }}>{creationErrors}</FormHelperText>
-
-            {/* <div className="AddUser">
-                <CustomButton
-                    onClick={() => { handleAddNewUser() }}
-                    text={'Ajouter un utilisateur'}
-                    color={'info'} />
-            </div> */}
         </div>
     );
 }
