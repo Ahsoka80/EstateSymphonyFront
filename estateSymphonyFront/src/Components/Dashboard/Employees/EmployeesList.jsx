@@ -19,7 +19,7 @@ export default function Employees() {
 
     useEffect(() => {
         getAllDistricts().then(data => { setDistricts(data); });
-        getRoles().then(data => { data[2].name = 'Employé'; setRoles(data.filter(role => role.name !== 'User')); });
+        getRoles().then(data => { data[2].name = 'Employé'; setRoles(data.filter(role => role.name !== 'User' && role.name !== 'Admin')); });
         getEmployees().then(data => {
             console.log(data);
             const employeesComplete = data.map((employee) => ({
@@ -37,12 +37,19 @@ export default function Employees() {
 
     const processRowUpdate = async (newRow, oldRow) => {
         try {
-            if (newRow !== oldRow) {
+            setCreationErrors('');
+            setCreationSuccess('Modification en cours..')
+            if ((oldRow.idRoles == 1) && (oldRow.email !== newRow.email)) {
+                newRow.idRoles = 1
+                newRow.email = oldRow.email
+                setCreationErrors('Il est impossible de modifier l\'adresse email de l\'administrateur !')
+            } else if (newRow !== oldRow) {
                 const response = await updateEmployee(newRow, newRow.id);
                 let Successful = response.message.split(' ')[1] === 'modifié';
                 Successful ? setCreationSuccess(response.message) : setCreationErrors(response.message);
                 return response.data;
             }
+            return oldRow;
         } catch (error) {
             throw new Error('Erreur lors de la mise à jour des données');
         }
@@ -71,16 +78,21 @@ export default function Employees() {
         try {
             setCreationErrors('');
             setCreationSuccess('Modification de l\'affectation..');
-            row.idDistricts = newDistrictId;
-            if (row.employees_EmployeesDistrict.length !== 0) {
-                const response = await updateEmployeeDistrict(row, row.employees_EmployeesDistrict[0].id);
-                let Successful = response.message.split(' ')[1] === 'modifié';
-                Successful ? setCreationSuccess('Affectation modifiée') : setCreationErrors(response.message);
-                Successful ? setEmployees(employees.map(emp => (emp.id === row.id) ? { ...emp, idDistricts: newDistrictId } : emp)) : '';
+            if ((row.idRoles === 1) && (row.idDistricts !== newDistrictId)) {
+                newDistrictId = row.idDistricts
+                setCreationErrors('Il est impossible d\'affecter un quartier à l\'administrateur !')
             } else {
-                const createEmpDis = await createEmployeeDistrict({ idDistricts: newDistrictId, idEmployees: row.id })
-                setEmployees(employees.map(emp => (emp.id === row.id) ? { ...emp, idDistricts: newDistrictId } : emp))
-                setCreationSuccess(createEmpDis.message);
+                row.idDistricts = newDistrictId;
+                if (row.employees_EmployeesDistrict.length !== 0) {
+                    const response = await updateEmployeeDistrict(row, row.employees_EmployeesDistrict[0].id);
+                    let Successful = response.message.split(' ')[1] === 'modifié';
+                    Successful ? setCreationSuccess('Affectation modifiée') : setCreationErrors(response.message);
+                    Successful ? setEmployees(employees.map(emp => (emp.id === row.id) ? { ...emp, idDistricts: newDistrictId } : emp)) : '';
+                } else {
+                    const createEmpDis = await createEmployeeDistrict({ idDistricts: newDistrictId, idEmployees: row.id })
+                    setEmployees(employees.map(emp => (emp.id === row.id) ? { ...emp, idDistricts: newDistrictId } : emp))
+                    setCreationSuccess(createEmpDis.message);
+                }
             }
         } catch (error) {
             console.error('Erreur lors de la mise à jour du quartier', error);
@@ -91,11 +103,18 @@ export default function Employees() {
         try {
             setCreationErrors('');
             setCreationSuccess('Modification du role..');
-            row.idRoles = newRoleId;
-            const response = await updateEmployee(row, row.id);
-            let Successful = response.message.split(' ')[1] === 'modifié';
-            Successful ? setEmployees(employees.map(emp => (emp.id === row.id ? { ...emp, idRoles: newRoleId } : emp))) : '';
-            Successful ? setCreationSuccess(response.message) : setCreationErrors(response.message);
+            console.log("old role : " + row.idRoles);
+            console.log("new role : " + newRoleId);
+            if ((row.idRoles == 1) && (row.idRoles != newRoleId)) {
+                newRoleId = 1
+                setCreationErrors('Vous ne pouvez pas modifié le role d\'un administrateur');
+            } else {
+                row.idRoles = newRoleId;
+                const response = await updateEmployee(row, row.id);
+                let Successful = response.message.split(' ')[1] === 'modifié';
+                Successful ? setEmployees(employees.map(emp => (emp.id === row.id ? { ...emp, idRoles: newRoleId } : emp))) : '';
+                Successful ? setCreationSuccess(response.message) : setCreationErrors(response.message);
+            }
         } catch (error) {
             console.error('Erreur lors de la mise à jour du rôle', error);
             setCreationErrors(error.message);
@@ -151,7 +170,7 @@ export default function Employees() {
             headerName: 'Actions',
             width: 100,
             renderCell: (params) => (
-                <IconButton onClick={() => handleDelete(params.row.id)}><GridDeleteIcon /></IconButton>
+                <IconButton onClick={() => (params.row.idRoles !== 1) ? handleDelete(params.row.id) : ''}>{(params.row.idRoles !== 1) ? <GridDeleteIcon /> : <></>}</IconButton>
             ),
         }
     ];

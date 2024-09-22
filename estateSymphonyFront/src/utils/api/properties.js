@@ -39,6 +39,16 @@ export const getPropertiesArchived = async () => {
         console.error('Erreur récupération des propriétés en fonction de leur status : ', error);
     }
 }
+//GET ALL PROPERTIES NOT ARCHIVED
+export const getPropertiesNotArchived = async () => {
+    try {
+        const response = await instance.get(`/properties/notArchived`);
+        console.log(response);
+        return response.data.data;
+    } catch (error) {
+        console.error('Erreur récupération des propriétés en fonction de leur status : ', error);
+    }
+}
 //GET ONE
 export const getProperty = async (id) => {
     try {

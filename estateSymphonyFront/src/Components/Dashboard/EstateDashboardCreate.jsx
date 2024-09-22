@@ -112,9 +112,6 @@ const EstateDashboardCreate = () => {
             <IconButton color="info" onClick={handleBack}>
                 <ArrowBack />
             </IconButton>
-            <TextField
-                value='En travaux..'
-            ></TextField>
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize

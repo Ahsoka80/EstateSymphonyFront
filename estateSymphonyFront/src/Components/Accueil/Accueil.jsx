@@ -6,7 +6,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useContext, useEffect, useState } from 'react';
-import PropertiesContext from '../../context/propertieContext';
 import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/esm/Row'
 import Col from 'react-bootstrap/esm/Col'
@@ -17,7 +16,7 @@ import { Form, Link, useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Box } from '@mui/material';
 import * as Yup from 'yup';
-import { getPropertiesBySearch } from '../../utils/api/properties';
+import { getPropertiesBySearch, getPropertiesNotArchived } from '../../utils/api/properties';
 import CustomButton from '../Buttons/CustomButton';
 import { getAllDistricts } from '../../utils/api/districts';
 import { getAllStatuses } from '../../utils/api/statuses';
@@ -36,6 +35,7 @@ const validation = Yup.object({
 export default function Accueil() {
   const { isLoggedIn } = useContext(AuthContext);
   const [propertiesBySearch, setPropertiesBySearch] = useState([]);
+  const [lastProperties, setLastProperties] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [idUser, setIdUser] = useState('');
@@ -52,6 +52,7 @@ export default function Accueil() {
       }
       getAllFavorisByOne(idUser).then(data => { setFavoris(data); })
     }
+    getPropertiesNotArchived().then(data => { setLastProperties(data.slice(0, 4)) })
   }, [email, idUser, isLoggedIn]);
 
   statuses?.forEach(status => {
@@ -75,11 +76,6 @@ export default function Accueil() {
     }
   }
 
-  let { properties } = useContext(PropertiesContext);
-  console.log(properties);
-  properties = properties?.slice(-4);
-  let propertiesReversed = properties?.reverse();
-  console.log(propertiesReversed);
   return (
     <>
       <Container>
@@ -314,15 +310,16 @@ export default function Accueil() {
           </Col>
 
           <Col className='card'>
-            {propertiesReversed.map((item, index) => {
-              return (
-                <CustomCard
-                  {...item}
-                  key={index}
-                  item={item}
-                >
-                </CustomCard>)
-            })}
+            {(lastProperties) ?
+              lastProperties.map((item, index) => {
+                return (
+                  <CustomCard
+                    {...item}
+                    key={index}
+                    item={item}
+                  >
+                  </CustomCard>)
+              }) : <></>}
           </Col>
         </Row>
         <Row>

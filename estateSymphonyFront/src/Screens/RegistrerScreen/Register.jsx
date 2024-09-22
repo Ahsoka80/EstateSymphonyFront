@@ -78,7 +78,7 @@ const RegisterForm = () => {
                     theme: 'colored',
                     transition: Flip,
                 });
-                handleHome();
+                handleLogin();
             }
         } catch (error) {
             console.error('Erreur réseau : ', error);

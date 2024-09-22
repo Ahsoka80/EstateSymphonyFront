@@ -23,7 +23,7 @@ const EmployeeCreate = () => {
 
     useEffect(() => {
         getUsersByRole(4).then(data => { setUsers(data); });
-        getRoles().then(data => { data[2].name = 'Employé'; data.splice(-1); setRoles(data); });
+        getRoles().then(data => { data[2].name = 'Employé'; setRoles(data.filter(role => role.name !== 'User' && role.name !== 'Admin')) });
         getAllDistricts().then(data => { setDistricts(data); });
     }, [])
 
